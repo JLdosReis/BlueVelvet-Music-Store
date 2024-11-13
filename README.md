@@ -13,4 +13,3 @@ Participants
 The following team members contributed to the development of this project:
 
 José Luiz dos Reis Neto
-a
