@@ -39,7 +39,9 @@ To use  just open a terminal and clone the repository
 ```
 
 To run the application, execute the following command in the project root directory or run it from IntelliJ IDEA:
-./mvnw spring-boot:run
+```bash
+  ./mvnw spring-boot:run
+```
 
 ### Project Management and Development Process
 This project follows the Scrum methodology for task management, with Jira as the primary tool for tracking sprints, user stories, and issues.
