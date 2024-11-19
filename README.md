@@ -9,11 +9,11 @@ The goal of this project is to complete the assigned tasks using Scrum as the pr
 ### Technologies Used
 - Language/Framework: Java (Spring Boot)
 - Frontend: Thymeleaf, Bootstrap
-- Database: MySQL
+- Database: 
 - Version Control: Git
 - Project Management: Jira
 - IDE: IntelliJ IDEA
-
+Google Firebase elements
 ### Team Members
 - José Luiz dos Reis Neto
 - Gabriel
