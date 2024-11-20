@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product View</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<header>
+    <h1>BlueVelvet Music Store</h1>
+</header>
+<main>
+    <h2>Product Details</h2>
+    <div class="product-details">
+        <h3 th:text="${product.name}"></h3>
+        <p><strong>Product ID:</strong> <span th:text="${product.id}"></span></p>
+        <p><strong>Category:</strong> <span th:text="${product.category}"></span></p>
+        <p><strong>Brand:</strong> <span th:text="${product.brand}"></span></p>
+        <img th:src="@{${product.imageUrl}}" alt="Product Image">
+        <p><strong>Short Description:</strong> <span th:text="${product.shortDescription}"></span></p>
+        <p><strong>Full Description:</strong></p>
+        <p th:text="${product.fullDescription}"></p>
+        <p><strong>List Price:</strong> $<span th:text="${product.price}"></span></p>
+        <p><strong>Discount:</strong> <span th:text="${(product.discount / product.price) * 100} + '%'"></span></p>
+        <p><strong>Enabled:</strong> <span th:text="${product.enabled ? 'Yes' : 'No'}"></span></p>
+        <p><strong>In Stock:</strong> <span th:text="${product.inStock ? 'Yes' : 'No'}"></span></p>
+        <p><strong>Creation Time:</strong> <span th:text="${product.creationTime}"></span></p>
+        <p><strong>Update Time:</strong> <span th:text="${product.updateTime}"></span></p>
+        <p><strong>Dimensions:</strong> Length: <span th:text="${product.dimensions.length}"></span> inches,
+            Width: <span th:text="${product.dimensions.width}"></span> inches,
+            Height: <span th:text="${product.dimensions.height}"></span> inches</p>
+        <p><strong>Weight:</strong> <span th:text="${product.weight}"></span> pounds</p>
+        <p><strong>Cost:</strong> $<span th:text="${product.cost}"></span></p>
+        <!-- Detalhes do Produto -->
+        <p><strong>Product Details:</strong></p>
+        <ul>
+            <li th:each="detail : ${product.details}">
+                <span th:text="${detail}"></span>
+            </li>
+        </ul>
+    </div>
+</main>
+</body>
+</html>
