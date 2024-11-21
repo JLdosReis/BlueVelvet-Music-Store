@@ -111,6 +111,52 @@
                 updatePaginationControls();
             } catch (error) {
                 console.error(error);
+                productList.innerHTML = `<tr><td colspan="8">Error fetching products: ${error.message}</td></tr>`;
+            }
+        }
+
+        // Fetch and display searched products
+        async function searchProducts() {
+            const query = searchInput.value.trim();
+
+            // If search input is empty, fetch and show the entire product list
+            if (!query) {
+                fetchProducts();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiUrl}/search?produto=${encodeURIComponent(query)}`);
+                if (!response.ok) throw new Error('Failed to fetch products: ' + response.statusText);
+                const data = await response.json();
+
+                if (data.length > 0) {
+                    productList.innerHTML = data.map(product => `
+                        <tr>
+                            <td>${product.idProduto}</td>
+                            <td><img src="${product.imageURL}" alt="${product.productName}" style="width: 100px; height: 100px;"></td>
+                            <td>${product.productName}</td>
+                            <td>${product.brand}</td>
+                            <td>${product.category}</td>
+                            <td>${product.price}</td>
+                            <td>${product.discount}</td>
+                            <td>
+                                <a href="view-product.html?id=${product.idProduto}">
+                                    <button class="details-btn">View</button>
+                                </a>
+                                <a href="edit-product.html?id=${product.idProduto}">
+                                    <button class="edit-btn">Edit</button>
+                                </a>
+                                <button class="delete-btn" data-id="${product.idProduto}">Delete</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    productList.innerHTML = `<tr><td colspan="8">No products found.</td></tr>`;
+                }
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                productList.innerHTML = `<tr><td colspan="8">Error fetching products: ${error.message}</td></tr>`;
             }
         }
 
@@ -163,9 +209,16 @@
             fetchProducts();
         });
 
+        // Attach search functionality to the input
+        searchInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') searchProducts();
+        });
+
         // Fetch products on page load
         fetchProducts();
     });
 </script>
+
+
 </body>
 </html>
