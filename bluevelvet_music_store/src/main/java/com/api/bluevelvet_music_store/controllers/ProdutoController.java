@@ -53,6 +53,16 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.OK).body(produtoModels);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getOneProduto(@PathVariable(value = "id") Long id){
+        Optional<ProdutoModel> produtoModelOpt = produtoService.findById(id);
+        if(produtoModelOpt.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(produtoModelOpt.get());
+    }
+
+
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateProduto(@PathVariable(value = "id") Long id,
                                                 @RequestBody @Valid ProdutoDto produtoDto){

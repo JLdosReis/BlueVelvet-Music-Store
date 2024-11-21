@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product - BlueVelvet Music Store</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">
+        <img src="images/banana.png" alt="BlueVelvet Music Store" />
+    </div>
+    <ul class="nav-links">
+        <li><a href="#">Articles</a></li>
+        <li><a href="#">Brands</a></li>
+        <li><a href="#">Categories</a></li>
+        <li><a href="#">Customers</a></li>
+        <li><a href="#">Menus</a></li>
+        <li><a href="#">Orders</a></li>
+        <li><a href="dashboard.html">Products</a></li>
+        <li><a href="#">Sales Report</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Users</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h1>BlueVelvet Music Store</h1>
+    <h2>Edit Product</h2>
+
+    <!-- Formulário -->
+    <form id="editProductForm">
+        <input type="hidden" id="productId">
+
+        <input type="text" id="name" placeholder="Product Name" required>
+        <textarea id="shortDescription" placeholder="Short Description" required></textarea>
+        <textarea id="fullDescription" placeholder="Full Description" required></textarea>
+
+        <input type="text" id="brand" placeholder="Brand" required>
+        <input type="text" id="category" placeholder="Category" required>
+
+        <div>
+            <label>Choose main image</label>
+            <input type="file" id="mainImage" accept="image/png">
+        </div>
+
+        <div>
+            <label>Choose featured images</label>
+            <input type="file" id="featuredImages" accept="image/png" multiple>
+        </div>
+
+        <input type="number" id="listPrice" placeholder="List Price" step="0.01" required>
+        <input type="number" id="discountPercent" placeholder="Discount Percent" min="0" max="100" required>
+
+        <label>
+            <input type="checkbox" id="enabled"> Enabled
+        </label>
+        <label>
+            <input type="checkbox" id="inStock"> In Stock
+        </label>
+
+        <!-- Atributos personalizados -->
+        <h3>Custom Attributes</h3>
+        <div id="customAttributesContainer">
+            <!-- Os pares nome/valor serão adicionados aqui -->
+        </div>
+        <button type="button" id="addCustomAttributeBtn">Add Custom Attribute</button>
+
+        <button type="submit">Update Product</button>
+    </form>
+    <a href="dashboard.html">Back to Dashboard</a>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const customAttributesContainer = document.getElementById('customAttributesContainer');
+        const addCustomAttributeBtn = document.getElementById('addCustomAttributeBtn');
+
+        // Adicionar novo par de atributos personalizados
+        addCustomAttributeBtn.addEventListener('click', () => {
+            const attributeDiv = document.createElement('div');
+            attributeDiv.classList.add('attribute-pair');
+
+            attributeDiv.innerHTML = `
+                <input type="text" placeholder="Attribute Name" class="attribute-name" required>
+                <input type="text" placeholder="Attribute Value" class="attribute-value" required>
+                <button type="button" class="removeAttributeBtn">Remove</button>
+            `;
+
+            customAttributesContainer.appendChild(attributeDiv);
+
+            // Botão para remover o par de atributos
+            attributeDiv.querySelector('.removeAttributeBtn').addEventListener('click', () => {
+                customAttributesContainer.removeChild(attributeDiv);
+            });
+        });
+
+        // Submissão do formulário
+        document.getElementById('editProductForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            // Coletar dados do formulário
+            const productData = {
+                id: document.getElementById('productId').value,
+                name: document.getElementById('name').value,
+                shortDescription: document.getElementById('shortDescription').value,
+                fullDescription: document.getElementById('fullDescription').value,
+                brand: document.getElementById('brand').value,
+                category: document.getElementById('category').value,
+                mainImage: document.getElementById('mainImage').files[0]?.name || '',
+                featuredImages: Array.from(document.getElementById('featuredImages').files).map(file => file.name),
+                listPrice: parseFloat(document.getElementById('listPrice').value),
+                discountPercent: parseInt(document.getElementById('discountPercent').value),
+                enabled: document.getElementById('enabled').checked,
+                inStock: document.getElementById('inStock').checked,
+                customAttributes: Array.from(customAttributesContainer.children).map(attr => ({
+                    name: attr.querySelector('.attribute-name').value,
+                    value: attr.querySelector('.attribute-value').value
+                }))
+            };
+
+            // Enviar ao backend
+            fetch('http://localhost:8080/products', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productData)
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Error updating product');
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Product updated successfully!');
+                    window.location.href = 'dashboard.html';
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Failed to update product.');
+                });
+        });
+    });
+</script>
+</body>
+</html>
