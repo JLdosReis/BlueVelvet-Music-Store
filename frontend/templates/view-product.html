@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - BlueVelvet Music Store</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+<h1>Product Details</h1>
+
+<div id="product-details" class="container">
+    <div>
+        <label>Product ID:</label>
+        <span id="product-id">Loading...</span>
+    </div>
+
+    <div>
+        <label>Product Name:</label>
+        <span id="product-name">Loading...</span>
+    </div>
+
+    <div>
+        <label>Category:</label>
+        <span id="category">Loading...</span>
+    </div>
+
+    <div>
+        <label>Brand:</label>
+        <span id="brand">Loading...</span>
+    </div>
+
+    <div>
+        <label>Main Image:</label>
+        <img id="main-image" src="" alt="Product Image" style="width: 100px; height: 100px; display: none;" />
+    </div>
+
+    <div>
+        <label>Short Description:</label>
+        <span id="short-description">Loading...</span>
+    </div>
+
+    <div>
+        <label>Full Description:</label>
+        <p id="full-description">Loading...</p>
+    </div>
+
+    <div>
+        <label>List Price:</label>
+        <span id="list-price">Loading...</span>
+    </div>
+
+    <div>
+        <label>Discount:</label>
+        <span id="discount">Loading...</span>
+    </div>
+
+    <div>
+        <label>Net Price:</label>
+        <span id="net-price">Loading...</span>
+    </div>
+
+    <div>
+        <label>Enabled:</label>
+        <span id="enabled">Loading...</span>
+    </div>
+
+    <div>
+        <label>In Stock:</label>
+        <span id="in-stock">Loading...</span>
+    </div>
+
+    <div>
+        <label>Creation Time:</label>
+        <span id="creation-time">Loading...</span>
+    </div>
+
+    <div>
+        <label>Update Time:</label>
+        <span id="update-time">Loading...</span>
+    </div>
+
+    <div>
+        <label>Dimensions:</label>
+        <span id="dimensions">Loading...</span>
+    </div>
+
+    <div>
+        <label>Weight:</label>
+        <span id="weight">Loading...</span>
+    </div>
+
+    <div>
+        <label>Cost:</label>
+        <span id="cost">Loading...</span>
+    </div>
+
+    <div>
+        <label>Product Details:</label>
+        <ul id="product-details-list">
+            <!-- Dynamic product details list -->
+        </ul>
+    </div>
+</div>
+
+<button onclick="window.history.back()">Back to Dashboard</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const apiUrl = 'http://localhost:8080/produtos';
+
+        // Get the product ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        if (!productId) {
+            alert('Error: Product ID is missing in the URL.');
+            return;
+        }
+
+        try {
+            // Fetch product details from the API
+            const response = await fetch(`${apiUrl}/${productId}`);
+            if (!response.ok) throw new Error('Error fetching product details: ' + response.statusText);
+
+            const product = await response.json();
+
+            // Populate the product details in the HTML
+            document.getElementById('product-id').textContent = product.idProduto;
+            document.getElementById('product-name').textContent = product.productName;
+            document.getElementById('category').textContent = product.category;
+            document.getElementById('brand').textContent = product.brand;
+            document.getElementById('main-image').src = product.imageURL || 'images/default-product.png';
+            document.getElementById('main-image').style.display = 'block'; // Show the image if available
+            document.getElementById('short-description').textContent = product.shortDescription || 'N/A';
+            document.getElementById('full-description').textContent = product.fullDescription || 'N/A';
+            document.getElementById('list-price').textContent = `$${product.price}`;
+            document.getElementById('discount').textContent = `$${product.discount} (${Math.round(((product.discount * 100) / product.price)*100)/100}%  OFF)`;
+            document.getElementById('net-price').textContent = `$${product.price - product.discount}`;
+            document.getElementById('enabled').textContent = product.enabled ? 'Yes' : 'No';
+            document.getElementById('in-stock').textContent = product.inStock ? 'Yes' : 'No';
+            document.getElementById('creation-time').textContent = product.creationTime || 'N/A';
+            document.getElementById('update-time').textContent = product.updateTime || 'N/A';
+            document.getElementById('dimensions').textContent = product.dimensions || 'N/A';
+            document.getElementById('weight').textContent = product.weight || 'N/A';
+            document.getElementById('cost').textContent = `$${product.cost || 'N/A'}`;
+
+            // Populate additional product details
+            const detailsList = document.getElementById('product-details-list');
+            if (product.details && product.details.length > 0) {
+                product.details.forEach(detail => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = detail;
+                    detailsList.appendChild(listItem);
+                });
+            } else {
+                detailsList.innerHTML = '<li>No additional details available.</li>';
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Error loading product details. Please try again later.');
+        }
+    });
+</script>
+</body>
+</html>

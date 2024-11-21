@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details - BlueVelvet Music Store</title>
+  <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+<h1>Product Details</h1>
+
+<div id="product-details" class="container">
+  <!-- Detalhes do produto -->
+  <div>
+    <label>Product ID:</label>
+    <span id="product-id">5</span>
+  </div>
+  <div>
+    <label>Product Name:</label>
+    <span id="product-name">The Jesus and Mary Chain Poster</span>
+  </div>
+  <div>
+    <label>Category:</label>
+    <span id="category">Art & Prints</span>
+  </div>
+  <!-- Outros detalhes omitidos para brevidade -->
+  <div>
+    <label>Product Details:</label>
+    <ul id="product-details-list">
+      <li>Material: Premium glossy paper</li>
+      <li>Color: Full-color print</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Botão para buscar produtos -->
+<button id="fetchProducts">Buscar Produtos</button>
+
+<!-- Div para exibir a resposta -->
+<div id="response"></div>
+
+<script>
+  document.getElementById('fetchProducts').addEventListener('click', function() {
+    const apiUrl = 'http://localhost:8080/produtos/search?produto=';
+
+    fetch(apiUrl)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Erro na requisição: ' + response.statusText);
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log('Produtos encontrados:', data);
+
+              // Exibir os produtos na página
+              const responseDiv = document.getElementById('response');
+              responseDiv.innerHTML = '<h2>Produtos Encontrados:</h2>';
+
+              if (data.length > 0) {
+                const productList = document.createElement('ul');
+                data.forEach(product => {
+                  const listItem = document.createElement('li');
+                  listItem.textContent = ` ID: ${product.idProduto}, Nome: ${product.productName}, Preço: R$${product.price} `;
+                  productList.appendChild(listItem);
+                });
+                responseDiv.appendChild(productList);
+              } else {
+                responseDiv.innerHTML += '<p>Nenhum produto encontrado.</p>';
+              }
+            })
+            .catch(error => {
+              console.error('Erro ao buscar produtos:', error);
+              document.getElementById('response').innerText = 'Erro ao buscar produtos: ' + error.message;
+            });
+  });
+</script>
+
+</body>
+</html>

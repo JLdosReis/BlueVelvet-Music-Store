@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product - BlueVelvet Music Store</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">
+        <img src="images/banana.png" alt="BlueVelvet Music Store" />
+    </div>
+    <ul class="nav-links">
+        <li><a href="#">Articles</a></li>
+        <li><a href="#">Brands</a></li>
+        <li><a href="#">Categories</a></li>
+        <li><a href="#">Customers</a></li>
+        <li><a href="#">Menus</a></li>
+        <li><a href="#">Orders</a></li>
+        <li><a href="dashboard.html">Products</a></li>
+        <li><a href="#">Sales Report</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Users</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h1>BlueVelvet Music Store</h1>
+    <h2>Edit Product</h2>
+
+    <!-- Form for editing the product -->
+    <form id="editProductForm">
+        <input type="hidden" id="productId">
+
+        <input type="text" id="name" placeholder="Product Name" required>
+        <textarea id="shortDescription" placeholder="Short Description" required></textarea>
+        <textarea id="fullDescription" placeholder="Full Description" required></textarea>
+
+        <input type="text" id="brand" placeholder="Brand" required>
+        <input type="text" id="category" placeholder="Category" required>
+
+        <div>
+            <label>Choose main image:</label>
+            <input type="file" id="mainImage" accept="image/*">
+        </div>
+
+        <div id="currentMainImage">
+            <p>Current Main Image: <em id="currentMainImageName">None</em></p>
+        </div>
+
+        <div>
+            <label>Choose featured images:</label>
+            <input type="file" id="featuredImages" accept="image/*" multiple>
+        </div>
+
+        <div id="currentFeaturedImages">
+            <p>Current Featured Images: <em id="currentFeaturedImagesNames">None</em></p>
+        </div>
+
+        <input type="number" id="listPrice" placeholder="List Price" step="0.01" required>
+        <input type="number" id="discountPercent" placeholder="Discount Percent" min="0" max="100" required>
+
+        <label>
+            <input type="checkbox" id="enabled"> Enabled
+        </label>
+        <label>
+            <input type="checkbox" id="inStock"> In Stock
+        </label>
+
+        <input type="number" id="length" placeholder="Length (inches)" step="0.01" required>
+        <input type="number" id="width" placeholder="Width (inches)" step="0.01" required>
+        <input type="number" id="height" placeholder="Height (inches)" step="0.01" required>
+        <input type="number" id="weight" placeholder="Weight (pounds)" step="0.01" required>
+
+        <input type="number" id="cost" placeholder="Cost" step="0.01" required>
+
+        <div id="productDetails">
+            <label>Product Details:</label>
+            <button type="button" onclick="addDetail()">Add Detail</button>
+        </div>
+
+        <button type="submit">Update Product</button>
+    </form>
+    <button onclick="window.history.back()">Back to Dashboard</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const apiUrl = 'http://localhost:8080/produtos';
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        if (!productId) {
+            alert('Error: Product ID is missing in the URL.');
+            return;
+        }
+
+        try {
+            // Fetch product details from the server
+            const response = await fetch(`${apiUrl}/${productId}`);
+            if (!response.ok) throw new Error('Error fetching product details: ' + response.statusText);
+
+            const product = await response.json();
+
+            // Pre-fill the form with product details
+            document.getElementById('productId').value = product.idProduto;
+            document.getElementById('name').value = product.productName;
+            document.getElementById('shortDescription').value = product.shortDescription;
+            document.getElementById('fullDescription').value = product.fullDescription;
+            document.getElementById('brand').value = product.brand;
+            document.getElementById('category').value = product.category;
+            document.getElementById('listPrice').value = product.price;
+            document.getElementById('discountPercent').value = product.discount;
+            document.getElementById('enabled').checked = product.enabled;
+            document.getElementById('inStock').checked = product.inStock;
+            document.getElementById('length').value = product.dimensions?.length || '';
+            document.getElementById('width').value = product.dimensions?.width || '';
+            document.getElementById('height').value = product.dimensions?.height || '';
+            document.getElementById('weight').value = product.weight || '';
+            document.getElementById('cost').value = product.cost || '';
+
+            // Handle current images
+            document.getElementById('currentMainImageName').textContent = product.imageUrl || 'None';
+            document.getElementById('currentFeaturedImagesNames').textContent = product.featuredImages?.join(', ') || 'None';
+
+            // Populate existing product details
+            const productDetailsDiv = document.getElementById('productDetails');
+            product.details?.forEach(detail => {
+                const detailName = document.createElement('input');
+                detailName.value = detail.name;
+                detailName.placeholder = 'Detail Name';
+                const detailValue = document.createElement('input');
+                detailValue.value = detail.value;
+                detailValue.placeholder = 'Detail Value';
+                productDetailsDiv.appendChild(detailName);
+                productDetailsDiv.appendChild(detailValue);
+            });
+        } catch (error) {
+            console.error(error);
+            alert('Error loading product details. Please try again later.');
+        }
+    });
+
+    // Handle form submission to update the product
+    document.getElementById('editProductForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const productId = document.getElementById('productId').value;
+        const updatedProduct = {
+            idProduto: productId,
+            productName: document.getElementById('name').value,
+            shortDescription: document.getElementById('shortDescription').value,
+            fullDescription: document.getElementById('fullDescription').value,
+            brand: document.getElementById('brand').value,
+            category: document.getElementById('category').value,
+            price: parseFloat(document.getElementById('listPrice').value),
+            discount: parseInt(document.getElementById('discountPercent').value),
+            enabled: document.getElementById('enabled').checked,
+            inStock: document.getElementById('inStock').checked,
+            dimensions: {
+                length: parseFloat(document.getElementById('length').value),
+                width: parseFloat(document.getElementById('width').value),
+                height: parseFloat(document.getElementById('height').value),
+            },
+            weight: parseFloat(document.getElementById('weight').value),
+            cost: parseFloat(document.getElementById('cost').value),
+        };
+
+        try {
+            const response = await fetch(`http://localhost:8080/produtos/${productId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedProduct),
+            });
+
+            if (!response.ok) throw new Error('Error updating product: ' + response.statusText);
+
+            alert('Product updated successfully!');
+            window.location.href = 'dashboard.html';
+        } catch (error) {
+            console.error(error);
+            alert('Error updating product. Please try again later.');
+        }
+    });
+
+    function addDetail() {
+        const productDetailsDiv = document.getElementById('productDetails');
+        const detailName = document.createElement('input');
+        detailName.placeholder = 'Detail Name';
+        const detailValue = document.createElement('input');
+        detailValue.placeholder = 'Detail Value';
+        productDetailsDiv.appendChild(detailName);
+        productDetailsDiv.appendChild(detailValue);
+    }
+</script>
+</body>
+</html>

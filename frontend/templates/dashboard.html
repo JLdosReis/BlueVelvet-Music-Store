@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - BlueVelvet Music Store</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">
+        <img src="images/banana.png" alt="BlueVelvet Music Store" />
+    </div>
+    <ul class="nav-links">
+        <li><a href="#">Articles</a></li>
+        <li><a href="#">Brands</a></li>
+        <li><a href="#">Categories</a></li>
+        <li><a href="#">Customers</a></li>
+        <li><a href="#">Menus</a></li>
+        <li><a href="#">Orders</a></li>
+        <li><a href="dashboard.html">Products</a></li>
+        <li><a href="#">Sales Report</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Users</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h1>BlueVelvet Music Store</h1>
+    <h2>Product Management</h2>
+
+    <div>Welcome, Atticus (Administrator)
+        <button id="logoutBtn">Logout</button>
+    </div>
+
+    <div id="productControls">
+        <button id="resetProductsBtn">Reset Products to Initial State</button>
+        <a href="create-product.html"><button id="addProductBtn">Add Product</button></a>
+        <input type="text" id="searchInput" placeholder="Search products...">
+        <div id="sortSection">
+            <select id="sortSelect">
+                <option value="productName">Sort by Name</option>
+                <option value="idProduto">Sort by ID</option>
+                <option value="brand">Sort by Brand</option>
+                <option value="category">Sort by Category</option>
+                <option value="price">Sort by Price</option>
+                <option value="discount">Sort by Discount</option>
+            </select>
+            <button id="toggleSortOrderBtn">ASC</button>
+        </div>
+    </div>
+
+    <table id="productTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="productList">
+        <!-- Dynamic rows will be inserted here -->
+        </tbody>
+    </table>
+
+    <div id="pagination">
+        <button id="firstPage">First</button>
+        <button id="prevPage">Prev</button>
+        <span id="pageIndicator"></span>
+        <button id="nextPage">Next</button>
+        <button id="lastPage">Last</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const apiUrl = 'http://localhost:8080/produtos';
+        const productList = document.getElementById('productList');
+        const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        const toggleSortOrderBtn = document.getElementById('toggleSortOrderBtn');
+        const pageIndicator = document.getElementById('pageIndicator');
+        const paginationDiv = document.getElementById('pagination');
+
+        let products = [];
+        let currentPage = 1;
+        let totalPages = 1;
+        let sortCriteria = sortSelect.value; // Default sorting criterion
+        let sortOrder = 'asc'; // Default sorting order
+
+        // Fetch products from API
+        async function fetchProducts() {
+            try {
+                const queryParams = new URLSearchParams({
+                    page: currentPage - 1,
+                    size: 10, // Default items per page
+                    sort: `${sortCriteria},${sortOrder}`
+                });
+                const response = await fetch(`${apiUrl}?${queryParams}`);
+                if (!response.ok) throw new Error('Error fetching products: ' + response.statusText);
+                const data = await response.json();
+                products = data.content;
+                totalPages = data.page.totalPages;
+                displayProducts();
+                updatePaginationControls();
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // Display products in the table
+        function displayProducts() {
+            productList.innerHTML = products.map(product => `
+                <tr>
+                    <td>${product.idProduto}</td>
+                    <td><img src="${product.imageURL}" alt="${product.productName}" style="width: 100px; height: 100px;"></td>
+                    <td>${product.productName}</td>
+                    <td>${product.brand}</td>
+                    <td>${product.category}</td>
+                    <td>${product.price}</td>
+                    <td>${product.discount}</td>
+                    <td>
+                        <a href="view-product.html?id=${product.idProduto}">
+                            <button class="details-btn">View</button>
+                        </a>
+                        <a href="edit-product.html?id=${product.idProduto}">
+                            <button class="edit-btn">Edit</button>
+                        </a>
+                        <button class="delete-btn" data-id="${product.idProduto}">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Update pagination controls
+        function updatePaginationControls() {
+            paginationDiv.style.display = totalPages > 1 ? 'block' : 'none';
+            pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
+        }
+
+        // Event handlers for pagination buttons
+        document.getElementById('firstPage').onclick = () => { currentPage = 1; fetchProducts(); };
+        document.getElementById('prevPage').onclick = () => { if (currentPage > 1) currentPage--; fetchProducts(); };
+        document.getElementById('nextPage').onclick = () => { if (currentPage < totalPages) currentPage++; fetchProducts(); };
+        document.getElementById('lastPage').onclick = () => { currentPage = totalPages; fetchProducts(); };
+
+        // Handle sorting criteria changes
+        sortSelect.addEventListener('change', () => {
+            sortCriteria = sortSelect.value;
+            fetchProducts();
+        });
+
+        // Handle sorting order toggle
+        toggleSortOrderBtn.addEventListener('click', () => {
+            sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+            toggleSortOrderBtn.textContent = sortOrder.toUpperCase();
+            fetchProducts();
+        });
+
+        // Fetch products on page load
+        fetchProducts();
+    });
+</script>
+</body>
+</html>
