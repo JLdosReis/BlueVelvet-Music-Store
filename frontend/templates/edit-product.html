@@ -30,7 +30,7 @@
     <h1>BlueVelvet Music Store</h1>
     <h2>Edit Product</h2>
 
-    <!-- The form to edit the product -->
+    <!-- Form for editing the product -->
     <form id="editProductForm">
         <input type="hidden" id="productId">
 
@@ -42,21 +42,21 @@
         <input type="text" id="category" placeholder="Category" required>
 
         <div>
-            <label>Choose main image</label>
-            <input type="file" id="mainImage" accept="image/png">
+            <label>Choose main image:</label>
+            <input type="file" id="mainImage" accept="image/*">
         </div>
 
         <div id="currentMainImage">
-            <p>Current Main Image: <em id="currentMainImageName"></em></p>
+            <p>Current Main Image: <em id="currentMainImageName">None</em></p>
         </div>
 
         <div>
-            <label>Choose featured images</label>
-            <input type="file" id="featuredImages" accept="image/png" multiple>
+            <label>Choose featured images:</label>
+            <input type="file" id="featuredImages" accept="image/*" multiple>
         </div>
 
         <div id="currentFeaturedImages">
-            <p>Current Featured Images: <em id="currentFeaturedImagesNames"></em></p>
+            <p>Current Featured Images: <em id="currentFeaturedImagesNames">None</em></p>
         </div>
 
         <input type="number" id="listPrice" placeholder="List Price" step="0.01" required>
@@ -77,110 +77,123 @@
         <input type="number" id="cost" placeholder="Cost" step="0.01" required>
 
         <div id="productDetails">
-            <input type="text" placeholder="Detail Name">
-            <input type="text" placeholder="Detail Value">
+            <label>Product Details:</label>
             <button type="button" onclick="addDetail()">Add Detail</button>
         </div>
 
         <button type="submit">Update Product</button>
     </form>
-    <a href="dashboard.html">Back to Dashboard</a>
+    <button onclick="window.history.back()">Back to Dashboard</button>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Get the product ID from the URL or sessionStorage/localStorage
+    document.addEventListener('DOMContentLoaded', async () => {
+        const apiUrl = 'http://localhost:8080/produtos';
         const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get('id');  // Assuming product ID is passed as a query parameter (e.g., ?id=1)
+        const productId = urlParams.get('id');
 
-        if (productId) {
-            // Fetch the product details from LocalStorage
-            const products = JSON.parse(localStorage.getItem('products')) || [];
-            const product = products.find(p => p.id == productId);
-
-            if (product) {
-                // Fill in the form with the product details
-                document.getElementById('productId').value = product.id;
-                document.getElementById('name').value = product.name;
-                document.getElementById('shortDescription').value = product.shortDescription;
-                document.getElementById('fullDescription').value = product.fullDescription;
-                document.getElementById('brand').value = product.brand;
-                document.getElementById('category').value = product.category;
-                document.getElementById('listPrice').value = product.listPrice;
-                document.getElementById('discountPercent').value = product.discountPercent;
-                document.getElementById('enabled').checked = product.enabled;
-                document.getElementById('inStock').checked = product.inStock;
-                document.getElementById('length').value = product.length;
-                document.getElementById('width').value = product.width;
-                document.getElementById('height').value = product.height;
-                document.getElementById('weight').value = product.weight;
-                document.getElementById('cost').value = product.cost;
-
-                // Populate current images
-                document.getElementById('currentMainImageName').textContent = product.mainImage;
-                document.getElementById('currentFeaturedImagesNames').textContent = product.featuredImages.join(', ');
-
-                // Fill in product details (optional)
-                const productDetailsDiv = document.getElementById('productDetails');
-                product.details.forEach(detail => {
-                    const inputName = document.createElement('input');
-                    inputName.value = detail.name;
-                    const inputValue = document.createElement('input');
-                    inputValue.value = detail.value;
-                    productDetailsDiv.appendChild(inputName);
-                    productDetailsDiv.appendChild(inputValue);
-                });
-            }
+        if (!productId) {
+            alert('Error: Product ID is missing in the URL.');
+            return;
         }
 
-        // Handle form submission to update the product
-        document.getElementById('editProductForm').addEventListener('submit', (event) => {
-            event.preventDefault();
+        try {
+            // Fetch product details from the server
+            const response = await fetch(`${apiUrl}/${productId}`);
+            if (!response.ok) throw new Error('Error fetching product details: ' + response.statusText);
 
-            // Update the product object with the new values
-            const updatedProduct = {
-                id: document.getElementById('productId').value,
-                name: document.getElementById('name').value,
-                shortDescription: document.getElementById('shortDescription').value,
-                fullDescription: document.getElementById('fullDescription').value,
-                brand: document.getElementById('brand').value,
-                category: document.getElementById('category').value,
-                mainImage: document.getElementById('mainImage').files[0]?.name || '',
-                featuredImages: Array.from(document.getElementById('featuredImages').files).map(file => file.name),
-                listPrice: parseFloat(document.getElementById('listPrice').value),
-                discountPercent: parseInt(document.getElementById('discountPercent').value),
-                enabled: document.getElementById('enabled').checked,
-                inStock: document.getElementById('inStock').checked,
+            const product = await response.json();
+
+            // Pre-fill the form with product details
+            document.getElementById('productId').value = product.idProduto;
+            document.getElementById('name').value = product.productName;
+            document.getElementById('shortDescription').value = product.shortDescription;
+            document.getElementById('fullDescription').value = product.fullDescription;
+            document.getElementById('brand').value = product.brand;
+            document.getElementById('category').value = product.category;
+            document.getElementById('listPrice').value = product.price;
+            document.getElementById('discountPercent').value = product.discount;
+            document.getElementById('enabled').checked = product.enabled;
+            document.getElementById('inStock').checked = product.inStock;
+            document.getElementById('length').value = product.dimensions?.length || '';
+            document.getElementById('width').value = product.dimensions?.width || '';
+            document.getElementById('height').value = product.dimensions?.height || '';
+            document.getElementById('weight').value = product.weight || '';
+            document.getElementById('cost').value = product.cost || '';
+
+            // Handle current images
+            document.getElementById('currentMainImageName').textContent = product.imageUrl || 'None';
+            document.getElementById('currentFeaturedImagesNames').textContent = product.featuredImages?.join(', ') || 'None';
+
+            // Populate existing product details
+            const productDetailsDiv = document.getElementById('productDetails');
+            product.details?.forEach(detail => {
+                const detailName = document.createElement('input');
+                detailName.value = detail.name;
+                detailName.placeholder = 'Detail Name';
+                const detailValue = document.createElement('input');
+                detailValue.value = detail.value;
+                detailValue.placeholder = 'Detail Value';
+                productDetailsDiv.appendChild(detailName);
+                productDetailsDiv.appendChild(detailValue);
+            });
+        } catch (error) {
+            console.error(error);
+            alert('Error loading product details. Please try again later.');
+        }
+    });
+
+    // Handle form submission to update the product
+    document.getElementById('editProductForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const productId = document.getElementById('productId').value;
+        const updatedProduct = {
+            idProduto: productId,
+            productName: document.getElementById('name').value,
+            shortDescription: document.getElementById('shortDescription').value,
+            fullDescription: document.getElementById('fullDescription').value,
+            brand: document.getElementById('brand').value,
+            category: document.getElementById('category').value,
+            price: parseFloat(document.getElementById('listPrice').value),
+            discount: parseInt(document.getElementById('discountPercent').value),
+            enabled: document.getElementById('enabled').checked,
+            inStock: document.getElementById('inStock').checked,
+            dimensions: {
                 length: parseFloat(document.getElementById('length').value),
                 width: parseFloat(document.getElementById('width').value),
                 height: parseFloat(document.getElementById('height').value),
-                weight: parseFloat(document.getElementById('weight').value),
-                cost: parseFloat(document.getElementById('cost').value),
-                details: []  // Add details handling here as needed
-            };
+            },
+            weight: parseFloat(document.getElementById('weight').value),
+            cost: parseFloat(document.getElementById('cost').value),
+        };
 
-            // Update the product list in LocalStorage
-            const products = JSON.parse(localStorage.getItem('products')) || [];
-            const index = products.findIndex(p => p.id == updatedProduct.id);
-            if (index > -1) {
-                products[index] = updatedProduct;
-                localStorage.setItem('products', JSON.stringify(products));
-                alert('Product updated successfully!');
-            }
-        });
+        try {
+            const response = await fetch(`http://localhost:8080/produtos/${productId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedProduct),
+            });
+
+            if (!response.ok) throw new Error('Error updating product: ' + response.statusText);
+
+            alert('Product updated successfully!');
+            window.location.href = 'dashboard.html';
+        } catch (error) {
+            console.error(error);
+            alert('Error updating product. Please try again later.');
+        }
     });
 
-    // Function to add a new detail
     function addDetail() {
         const productDetailsDiv = document.getElementById('productDetails');
-        const newDetailName = document.createElement('input');
-        const newDetailValue = document.createElement('input');
-        newDetailName.placeholder = "New Detail Name";
-        newDetailValue.placeholder = "New Detail Value";
-        productDetailsDiv.appendChild(newDetailName);
-        productDetailsDiv.appendChild(newDetailValue);
+        const detailName = document.createElement('input');
+        detailName.placeholder = 'Detail Name';
+        const detailValue = document.createElement('input');
+        detailValue.placeholder = 'Detail Value';
+        productDetailsDiv.appendChild(detailName);
+        productDetailsDiv.appendChild(detailValue);
     }
 </script>
-
 </body>
 </html>
