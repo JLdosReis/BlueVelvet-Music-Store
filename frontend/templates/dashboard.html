@@ -106,7 +106,7 @@
                 if (!response.ok) throw new Error('Error fetching products: ' + response.statusText);
                 const data = await response.json();
                 products = data.content;
-                totalPages = data.totalPages;
+                totalPages = data.page.totalPages;
                 displayProducts();
                 updatePaginationControls();
             } catch (error) {
@@ -208,15 +208,20 @@
             attachDeleteEventListeners();
         }
 
+        //
+        // Update pagination controls
         function updatePaginationControls() {
             paginationDiv.style.display = totalPages > 1 ? 'block' : 'none';
             pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
         }
 
+        // Event handlers for pagination buttons
         document.getElementById('firstPage').onclick = () => { currentPage = 1; fetchProducts(); };
         document.getElementById('prevPage').onclick = () => { if (currentPage > 1) currentPage--; fetchProducts(); };
         document.getElementById('nextPage').onclick = () => { if (currentPage < totalPages) currentPage++; fetchProducts(); };
         document.getElementById('lastPage').onclick = () => { currentPage = totalPages; fetchProducts(); };
+
+        //
 
         sortSelect.addEventListener('change', () => {
             sortCriteria = sortSelect.value;
