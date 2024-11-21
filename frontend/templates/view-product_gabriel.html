@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product View</title>
-    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 <header>
@@ -13,34 +12,55 @@
 </header>
 <main>
     <h2>Product Details</h2>
-    <div class="product-details">
-        <h3 th:text="${product.name}"></h3>
-        <p><strong>Product ID:</strong> <span th:text="${product.id}"></span></p>
-        <p><strong>Category:</strong> <span th:text="${product.category}"></span></p>
-        <p><strong>Brand:</strong> <span th:text="${product.brand}"></span></p>
-        <img th:src="@{${product.imageUrl}}" alt="Product Image">
-        <p><strong>Short Description:</strong> <span th:text="${product.shortDescription}"></span></p>
-        <p><strong>Full Description:</strong></p>
-        <p th:text="${product.fullDescription}"></p>
-        <p><strong>List Price:</strong> $<span th:text="${product.price}"></span></p>
-        <p><strong>Discount:</strong> <span th:text="${(product.discount / product.price) * 100} + '%'"></span></p>
-        <p><strong>Enabled:</strong> <span th:text="${product.enabled ? 'Yes' : 'No'}"></span></p>
-        <p><strong>In Stock:</strong> <span th:text="${product.inStock ? 'Yes' : 'No'}"></span></p>
-        <p><strong>Creation Time:</strong> <span th:text="${product.creationTime}"></span></p>
-        <p><strong>Update Time:</strong> <span th:text="${product.updateTime}"></span></p>
-        <p><strong>Dimensions:</strong> Length: <span th:text="${product.dimensions.length}"></span> inches,
-            Width: <span th:text="${product.dimensions.width}"></span> inches,
-            Height: <span th:text="${product.dimensions.height}"></span> inches</p>
-        <p><strong>Weight:</strong> <span th:text="${product.weight}"></span> pounds</p>
-        <p><strong>Cost:</strong> $<span th:text="${product.cost}"></span></p>
-        <!-- Detalhes do Produto -->
-        <p><strong>Product Details:</strong></p>
-        <ul>
-            <li th:each="detail : ${product.details}">
-                <span th:text="${detail}"></span>
-            </li>
-        </ul>
+    <div class="product-details" id="product-details">
+        <!-- Os detalhes do produto serão preenchidos dinamicamente via JavaScript -->
     </div>
 </main>
+<script>
+    // URL para buscar o produto
+    const apiUrl = 'http://localhost:8080/api/product-view'; // Ajuste o endpoint conforme necessário
+
+    // Função para buscar os detalhes do produto
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro na requisição: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(product => {
+            // Preencher os detalhes do produto na página
+            const productDetailsDiv = document.getElementById('product-details');
+            productDetailsDiv.innerHTML =
+                <h3>${product.name}</h3>
+            <p><strong>Product ID:</strong> ${product.id}</p>
+            <p><strong>Category:</strong> ${product.category}</p>
+            <p><strong>Brand:</strong> ${product.brand}</p>
+            <img src="${product.imageUrl}" alt="Product Image">
+                <p><strong>Short Description:</strong> ${product.shortDescription}</p>
+                <p><strong>Full Description:</strong> ${product.fullDescription}</p>
+                <p><strong>List Price:</strong> $${product.price}</p>
+                <p><strong>Discount:</strong> ${((product.discount / product.price) * 100).toFixed(2)}%</p>
+                <p><strong>Enabled:</strong> ${product.enabled ? 'Yes' : 'No'}</p>
+                <p><strong>In Stock:</strong> ${product.inStock ? 'Yes' : 'No'}</p>
+                <p><strong>Creation Time:</strong> ${new Date(product.creationTime).toLocaleString()}</p>
+                <p><strong>Update Time:</strong> ${new Date(product.updateTime).toLocaleString()}</p>
+                <p><strong>Dimensions:</strong> Length: ${product.dimensions.length} inches,
+                    Width: ${product.dimensions.width} inches,
+                    Height: ${product.dimensions.height} inches</p>
+                <p><strong>Weight:</strong> ${product.weight} pounds</p>
+                <p><strong>Cost:</strong> $${product.cost}</p>
+                <p><strong>Product Details:</strong></p>
+                <ul>
+                    ${product.details.map(detail => <li>${detail}</li>).join('')}
+                </ul>
+                ;
+                })
+                .catch(error => {
+                console.error('Erro ao buscar os detalhes do produto:', error);
+                const productDetailsDiv = document.getElementById('product-details');
+                productDetailsDiv.innerHTML = <p>Erro ao carregar os detalhes do produto: ${error.message}</p>;
+        });
+</script>
 </body>
 </html>

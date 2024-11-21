@@ -7,67 +7,148 @@
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>BlueVelvet Music Store</h1>
-        <h2>Add Product</h2>
-
-        <form id="createProductForm">
-
-            <input type="text" id="name" placeholder="Product Name" required>
-    
-            <textarea id="shortDescription" placeholder="Short Description" required></textarea>
-           
-            <textarea id="fullDescription" placeholder="Full Description" required></textarea>
-           
-            <input type="text" id="brand" placeholder="Brand" required>
-           
-            <input type="text" id="category" placeholder="Category" required>
-           
-            <div>
-                <label>Choose main image</label>
-                <input type="file" id="mainImage" accept="image/png" required>
-            </div>
-            
-            <div>
-                <label>Choose featured images</label>
-                <input type="file" id="featuredImages" accept="image/png" multiple>
-            </div>
-          
-            <input type="number" id="listPrice" placeholder="List Price" step="0.01" required>
-         
-            <input type="number" id="discountPercent" placeholder="Discount Percent" min="0" max="100" required>
-            
-            <label>
-                <input type="checkbox" id="enabled"> Enabled
-            </label>
-          
-
-            <label>
-                <input type="checkbox" id="inStock"> In Stock
-            </label>
-            
-            <input type="number" id="length" placeholder="Length (inches)" step="0.01" required>
-           
-            <input type="number" id="width" placeholder="Width (inches)" step="0.01" required>
-           
-            <input type="number" id="height" placeholder="Height (inches)" step="0.01" required>
-         
-            <input type="number" id="weight" placeholder="Weight (pounds)" step="0.01" required>
-      
-            <input type="number" id="cost" placeholder="Cost" step="0.01" required>
-      
-            <div id="productDetails">
-                <input type="text" placeholder="Detail Name">
-                <input type="text" placeholder="Detail Value">
-                <button type="button" id="addDetailBtn">Add Detail</button>
-             </div>
-
-            <div>
-                <button type="submit">Add Product</button>
-            </div>
-        </form>
-        <a href="dashboard.html">Back to Dashboard</a>
+<nav class="navbar">
+    <div class="logo">
+        <img src="images/banana.png" alt="BlueVelvet Music Store" />
     </div>
-    <script src="script.js"></script>
+    <ul class="nav-links">
+        <li><a href="#">Articles</a></li>
+        <li><a href="#">Brands</a></li>
+        <li><a href="#">Categories</a></li>
+        <li><a href="#">Customers</a></li>
+        <li><a href="#">Menus</a></li>
+        <li><a href="#">Orders</a></li>
+        <li><a href="dashboard.html">Products</a></li>
+        <li><a href="#">Sales Report</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Users</a></li>
+    </ul>
+</nav>
+<div class="container">
+    <h1>BlueVelvet Music Store</h1>
+    <h2>Add Product</h2>
+
+    <form id="createProductForm" enctype="multipart/form-data">
+
+        <input type="text" id="name" placeholder="Product Name" required>
+
+        <textarea id="shortDescription" placeholder="Short Description" required></textarea>
+
+        <textarea id="fullDescription" placeholder="Full Description" required></textarea>
+
+        <input type="text" id="brand" placeholder="Brand" required>
+
+        <input type="text" id="category" placeholder="Category" required>
+
+        <div>
+            <label>Choose main image</label>
+            <input type="file" id="mainImage" accept="image/png" required>
+        </div>
+
+        <div>
+            <label>Choose featured images</label>
+            <input type="file" id="featuredImages" accept="image/png" multiple>
+        </div>
+
+        <input type="number" id="listPrice" placeholder="List Price" step="0.01" required>
+
+        <input type="number" id="discountPercent" placeholder="Discount Percent" min="0" max="100" required>
+
+        <label>
+            <input type="checkbox" id="enabled"> Enabled
+        </label>
+
+        <label>
+            <input type="checkbox" id="inStock"> In Stock
+        </label>
+
+        <input type="number" id="length" placeholder="Length (inches)" step="0.01" required>
+
+        <input type="number" id="width" placeholder="Width (inches)" step="0.01" required>
+
+        <input type="number" id="height" placeholder="Height (inches)" step="0.01" required>
+
+        <input type="number" id="weight" placeholder="Weight (pounds)" step="0.01" required>
+
+        <input type="number" id="cost" placeholder="Cost" step="0.01" required>
+
+        <div id="productDetails">
+            <input type="text" placeholder="Detail Name">
+            <input type="text" placeholder="Detail Value">
+            <button type="button" id="addDetailBtn">Add Detail</button>
+        </div>
+
+        <div>
+            <button type="submit">Add Product</button>
+        </div>
+    </form>
+    <a href="dashboard.html">Back to Dashboard</a>
+</div>
+<script>
+    document.getElementById('createProductForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form from submitting the traditional way
+
+        // Prepare form data
+        const formData = new FormData();
+
+        formData.append('name', document.getElementById('name').value);
+        formData.append('shortDescription', document.getElementById('shortDescription').value);
+        formData.append('fullDescription', document.getElementById('fullDescription').value);
+        formData.append('brand', document.getElementById('brand').value);
+        formData.append('category', document.getElementById('category').value);
+        formData.append('listPrice', parseFloat(document.getElementById('listPrice').value));
+        formData.append('discountPercent', parseInt(document.getElementById('discountPercent').value));
+        formData.append('enabled', document.getElementById('enabled').checked ? 1 : 0);
+        formData.append('inStock', document.getElementById('inStock').checked ? 1 : 0);
+        formData.append('length', parseFloat(document.getElementById('length').value));
+        formData.append('width', parseFloat(document.getElementById('width').value));
+        formData.append('height', parseFloat(document.getElementById('height').value));
+        formData.append('weight', parseFloat(document.getElementById('weight').value));
+        formData.append('cost', parseFloat(document.getElementById('cost').value));
+
+        // Add product details (if any)
+        const details = [];
+        const detailInputs = document.querySelectorAll('#productDetails input');
+        for (let i = 0; i < detailInputs.length; i += 2) {
+            const detailName = detailInputs[i].value;
+            const detailValue = detailInputs[i + 1].value;
+            if (detailName && detailValue) {
+                details.push({ name: detailName, value: detailValue });
+            }
+        }
+        formData.append('details', JSON.stringify(details));
+
+        // Handle image file uploads
+        const mainImage = document.getElementById('mainImage').files[0];
+        if (mainImage) {
+            formData.append('mainImage', mainImage);
+        }
+
+        const featuredImages = document.getElementById('featuredImages').files;
+        for (let i = 0; i < featuredImages.length; i++) {
+            formData.append('featuredImages', featuredImages[i]);
+        }
+
+        // POST request to submit product data
+        fetch('/api/products', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Product added successfully!');
+                    window.location.href = 'dashboard.html'; // Redirect to dashboard
+                } else {
+                    alert('Error adding product. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error submitting product. Please try again.');
+            });
+    });
+</script>
 </body>
 </html>

@@ -12,28 +12,28 @@ public class ProdutoModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long produto_id;
+    private long idProduto;
 
-    private String product_name;
+    private String productName;
     private String brand;
     private String category;
     private BigDecimal price;
     private BigDecimal discount;
 
-    public long getProduto_id() {
-        return produto_id;
+    public long getIdProduto() {
+        return idProduto;
     }
 
-    public void setProduto_id(long produto_id) {
-        this.produto_id = produto_id;
+    public void setIdProduto(long idProduto) {
+        this.idProduto = idProduto;
     }
 
-    public String getProduct_name() {
-        return product_name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getBrand() {

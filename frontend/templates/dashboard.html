@@ -7,210 +7,207 @@
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>BlueVelvet Music Store</h1>
-        <h2>Product Management</h2>
+<nav class="navbar">
+    <div class="logo">
+        <img src="images/banana.png" alt="BlueVelvet Music Store" />
+    </div>
+    <ul class="nav-links">
+        <li><a href="#">Articles</a></li>
+        <li><a href="#">Brands</a></li>
+        <li><a href="#">Categories</a></li>
+        <li><a href="#">Customers</a></li>
+        <li><a href="#">Menus</a></li>
+        <li><a href="#">Orders</a></li>
+        <li><a href="dashboard.html">Products</a></li>
+        <li><a href="#">Sales Report</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Users</a></li>
+    </ul>
+</nav>
 
-        <!--
-        TRABALHO: O nome (Atticus) e papel (Administrator) abaixo foram inseridos
-        hard-coded. Na sua soluçõa o nome e papel exibidos deverão ser obtidos com 
-        base no usuário autenticado.
-        Template:  Welcome, {name} {(role)}
-        -->
-        <div>Welcome, Atticus (Administrator)
-            <button id="logoutBtn">Logout</button>
-        </div>
-       
-        <div id="productControls">
-            <button id="resetProductsBtn">Reset Products to Initial State</button>
-            <button id="addProductBtn">Add Product</button>
-            <input type="text" id="searchInput" placeholder="Search products...">
-            <select id="sortSelect">
-                <option value="name">Sort by Name</option>
-                <option value="id">Sort by ID</option>
-                <option value="brand">Sort by Brand</option>
-                <option value="category">Sort by Category</option>
-            </select>
-        </div>
-        
-        <table id="productTable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Brand</th>
-                    <th>Category</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <!-- 
-                TRABALHO - Em vez de incluir manualmente os produtos como abaixo, 
-                você deve usar JavaScript para percorrer a lista de produtos 
-                cadastrados com a API LocalStorage de JavaScript e exibindo cada produto 
-                em uma linha da tabela. Na sua solução com JavaScript, se tivermos mais de 5 produtos cadastrados, 
-                o mecanismo de paginação deverá ser ativado 
-            -->
-            <tbody id="productList">
-                <tr>
-                    <td>1</td>
-                    <td><img src="images/gbv-bee-thousand-cover.jpeg" alt="Guided by Voices - Bee Thousand" style="width: 100; height: 100px;"></td>
-                    <td>Guided by Voices - Bee Thousand</td>
-                    <td>Matador Records</td>
-                    <td>CD</td>
-                    <td>
-                        <button>View Details</button>
-                        <button>Edit</button>
-                        <button class="delete-btn">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="images/pavment-slanted-and-enchanted-cover.jpeg" alt="Pavement - Slanted and Enchanted" style="width: 100; height: 100px;"></td>
-                    <td>Pavement - Slanted and Enchanted</td>
-                    <td>Domino Recording Co</td>
-                    <td>MP3</td>
-                    <td>
-                        <button>View Details</button>
-                        <button>Edit</button>
-                        <button class="delete-btn">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td><img src="images/neutral-milk-hotel-in-the-aeroplane-over-the-sea-tshirt.jpeg" alt="Neutral Milk Hotel T-Shirt" style="width: 100; height: 100px;"></td>
-                    <td>Neutral Milk Hotel T-Shirt</td>
-                    <td>Merge Records</td>
-                    <td>T-Shirt</td>
-                    <td>
-                        <button>View Details</button>
-                        <button>Edit</button>
-                        <button class="delete-btn">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td><img src="images/indie-101-book.jpg" alt="Indie Rock 101" style="width: 100; height: 100px;"></td>
-                    <td>Indie Rock 101</td>
-                    <td>Music Books</td>
-                    <td>Book</td>
-                    <td>
-                        <button>View Details</button>
-                        <button>Edit</button>
-                        <button class="delete-btn">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td><img src="images/jamc-poster.png" alt="The Jesus and Mary Chain Poster" style="width: 100; height: 100px;"></td>
-                    <td>The Jesus and Mary Chain Poster</td>
-                    <td>Art & Prints</td>
-                    <td>Poster</td>
-                    <td>
-                        <button>View Details</button>
-                        <button>Edit</button>
-                        <button class="delete-btn">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td><img src="images/mbv-loveless-cd.jpeg" alt="My Bloody Valentine - Loveless" style="width: 100; height: 100px;"></td>
-                    <td>My Bloody Valentine - Loveless</td>
-                    <td>Creation Records</td>
-                    <td>CD</td>
-                    <td>
-                        <button>View Details</button>
-                        <button>Edit</button>
-                        <button class="delete-btn">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td><img src="images/yo-la-tengo-you-can-hear-heart-beating-as-one-mp3.jpeg" alt="Yo La Tengo - I Can Hear the Heart Beating as One" style="width: 100; height: 100px;"></td>
-                    <td>Yo La Tengo - I Can Hear the Heart Beating as One</td>
-                    <td>Matador Records</td>
-                    <td>MP3</td>
-                    <td>
-                        <button>View Details</button>
-                        <button>Edit</button>
-                        <button class="delete-btn">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td><img src="images/sonic-youth-washing-machine-tshirt.jpeg" alt="Sonic Youth T-Shirt" style="width: 100; height: 100px;"></td>
-                    <td>Sonic Youth T-Shirt</td>
-                    <td>Geffen Records</td>
-                    <td>T-Shirt</td>
-                    <td>
-                        <button>View Details</button>
-                        <button>Edit</button>
-                        <button class="delete-btn">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td><img src="images/our-band-could-be-your-life-book.jpeg" alt="Our Band Could Be Your Life" style="width: 100; height: 100px;"></td>
-                    <td>Our Band Could Be Your Life</td>
-                    <td>Indie Publishing</td>
-                    <td>Book</td>
-                    <td>
-                        <button>View Details</button>
-                        <button>Edit</button>
-                        <button class="delete-btn">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td><img src="images/velvet-underground-poster.jpeg" alt="The Velvet Underground Poster" style="width: 100; height: 100px;"></td>
-                    <td>The Velvet Underground Poster</td>
-                    <td>Classic Prints</td>
-                    <td>Poster</td>
-                    <td>
-                        <button>View Details</button>
-                        <button>Edit</button>
-                        <button class="delete-btn">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<div class="container">
+    <h1>BlueVelvet Music Store</h1>
+    <h2>Product Management</h2>
 
-        <!-- 
-            TRABALHO - Os controles de paginação somente deverão ser exibidos se tivermos menos do que 5 produtos cadastrados.
-        -->
-        <div id="pagination">
-            <button>First...</button>
-            <button>2</button>
-            <button>3</button>
-            <button>4</button>
-            <button>...Last</button>
-        </div>
+    <div>Welcome, Atticus (Administrator)
+        <button id="logoutBtn">Logout</button>
     </div>
 
-    <!-- 
-        TRABALHO: Neste momento, o código apenas exibe um alerta solicitando confirmação 
-        para excluir um produto. Você deve implementar a remoção do produto usando 
-        a API local storage e verificar a correta remoção do produto na lista de produtos exibidas no dashboard. 
-    -->
-    <script>
-        // JavaScript to show a delete confirmation alert
-        document.addEventListener('DOMContentLoaded', () => {
-            // Select all delete buttons
-            const deleteButtons = document.querySelectorAll('.delete-btn');
-            console.log(deleteButtons);
-            
-            // Add event listener to each delete button
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    // Show confirmation alert
-                    const confirmation = confirm("Are you sure you want to delete this product?");
-                    if (!confirmation) {
-                        // Prevent default action if not confirmed
-                        event.preventDefault();
-                    }
-                });
+    <div id="productControls">
+        <button id="resetProductsBtn">Reset Products to Initial State</button>
+        <button id="addProductBtn">Add Product</button>
+        <input type="text" id="searchInput" placeholder="Search products...">
+        <select id="sortSelect">
+            <option value="name">Sort by Name</option>
+            <option value="id">Sort by ID</option>
+            <option value="brand">Sort by Brand</option>
+            <option value="category">Sort by Category</option>
+        </select>
+    </div>
+
+    <table id="productTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="productList">
+        <!-- Dynamic rows will be inserted here -->
+        </tbody>
+    </table>
+
+    <div id="pagination" style="display:none;">
+        <button id="firstPage">First...</button>
+        <button id="prevPage">Prev</button>
+        <button id="nextPage">Next</button>
+        <button id="lastPage">...Last</button>
+    </div>
+</div>
+
+<script>
+    // Fetch products and display them
+    document.addEventListener('DOMContentLoaded', () => {
+        const apiUrl = 'http://localhost:8080/produtos';  // Adjust the API endpoint
+        const productList = document.getElementById('productList');
+        const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        const paginationDiv = document.getElementById('pagination');
+
+        let products = [];
+        let currentPage = 1;
+        const productsPerPage = 10;
+
+        // Fetch the product data
+        function fetchProducts() {
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('Erro na requisição: ' + response.statusText);
+                    return response.json();
+                })
+                .then(data => {
+                    products = data;
+                    displayProducts();
+                    handlePagination();
+                })
+                .catch(error => console.error('Erro ao buscar produtos:', error));
+        }
+
+        // Display products in table
+        function displayProducts() {
+            const filteredProducts = filterAndSortProducts();
+            const startIndex = (currentPage - 1) * productsPerPage;
+            const endIndex = startIndex + productsPerPage;
+            const productsToDisplay = filteredProducts.slice(startIndex, endIndex);
+
+            productList.innerHTML = '';
+            productsToDisplay.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${product.produto_id}</td>
+                <td><img src="${product.image_url}" alt="${product.product_name}" style="width: 100px; height: 100px;"></td>
+                <td>${product.product_name}</td>
+                <td>${product.brand}</td>
+                <td>${product.category}</td>
+                <td>
+                    <button>View Details</button>
+                    <button>Edit</button>
+                    <button class="delete-btn">Delete</button>
+                </td>
+            `;
+                productList.appendChild(row);
             });
+        }
+
+        // Filter and sort products
+        function filterAndSortProducts() {
+            let filtered = products.filter(product =>
+                product.product_name.toLowerCase().includes(searchInput.value.toLowerCase())
+            );
+
+            if (sortSelect.value === 'name') {
+                filtered.sort((a, b) => a.product_name.localeCompare(b.product_name));
+            } else if (sortSelect.value === 'id') {
+                filtered.sort((a, b) => a.id - b.id);
+            } else if (sortSelect.value === 'brand') {
+                filtered.sort((a, b) => a.brand.localeCompare(b.brand));
+            } else if (sortSelect.value === 'category') {
+                filtered.sort((a, b) => a.category.localeCompare(b.category));
+            }
+
+            return filtered;
+        }
+
+        // Handle pagination visibility and navigation
+        function handlePagination() {
+            if (products.length > productsPerPage) {
+                paginationDiv.style.display = 'block';
+            } else {
+                paginationDiv.style.display = 'none';
+            }
+        }
+
+        // Handle page navigation
+        document.getElementById('firstPage').addEventListener('click', () => {
+            currentPage = 1;
+            displayProducts();
         });
-    </script>
+
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayProducts();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            if (currentPage * productsPerPage < products.length) {
+                currentPage++;
+                displayProducts();
+            }
+        });
+
+        document.getElementById('lastPage').addEventListener('click', () => {
+            currentPage = Math.ceil(products.length / productsPerPage);
+            displayProducts();
+        });
+
+        // Search and sort event listeners
+        searchInput.addEventListener('input', displayProducts);
+        sortSelect.addEventListener('change', displayProducts);
+
+        // Fetch products on page load
+        fetchProducts();
+
+        // Delete functionality (confirmation and removal)
+        document.addEventListener('click', (event) => {
+            if (event.target.classList.contains('delete-btn')) {
+                const confirmation = confirm("Are you sure you want to delete this product?");
+                if (confirmation) {
+                    // Get product ID (this should be passed with the product)
+                    const productId = event.target.closest('tr').querySelector('td').textContent;
+                    deleteProduct(productId);
+                }
+            }
+        });
+
+        // Delete product (API or localStorage)
+        function deleteProduct(productId) {
+            // Call your API to delete product here, e.g.:
+            fetch(`${apiUrl}/${productId}`, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(() => {
+                    products = products.filter(product => product.id !== parseInt(productId));
+                    displayProducts();
+                })
+                .catch(error => console.error('Erro ao excluir produto:', error));
+        }
+    });
+</script>
 </body>
 </html>

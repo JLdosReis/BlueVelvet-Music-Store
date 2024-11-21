@@ -101,5 +101,44 @@
             </ul>
         </div>
     </div>
+
+     <script>
+         document.getElementById('fetchProducts').addEventListener('click', function() {
+             const apiUrl = 'http://localhost:8080/produtos';
+
+             fetch(apiUrl)
+                 .then(response => {
+                     if (!response.ok) {
+                         throw new Error('Erro na requisição: ' + response.statusText);
+                     }
+                     return response.json();
+                 })
+                 .then(data => {
+                     console.log('Produtos encontrados:', data);
+
+                     // Exibir os produtos na página
+                     const responseDiv = document.getElementById('response');
+                     responseDiv.innerHTML = '<h2>Produtos Encontrados:</h2>';
+
+                     if (data.length > 0) {
+                         const productList = document.createElement('ul');
+                         data.forEach(product => {
+                             const listItem = document.createElement('li');
+                             listItem.textContent = `Nome: ${product.product_name}, Preço: R$${product.price}`;
+                             productList.appendChild(listItem);
+                         });
+                         responseDiv.appendChild(productList);
+                     } else {
+                         responseDiv.innerHTML += '<p>Nenhum produto encontrado.</p>';
+                     }
+                 })
+                 .catch(error => {
+                     console.error('Erro ao buscar produtos:', error);
+                     document.getElementById('response').innerText = 'Erro ao buscar produtos: ' + error.message;
+                 });
+         });
+     </script>
+
+
 </body>
 </html>
