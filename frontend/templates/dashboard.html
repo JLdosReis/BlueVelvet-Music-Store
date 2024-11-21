@@ -106,7 +106,7 @@
                 if (!response.ok) throw new Error('Error fetching products: ' + response.statusText);
                 const data = await response.json();
                 products = data.content;
-                totalPages = data.page.totalPages;
+                totalPages = data.totalPages;
                 displayProducts();
                 updatePaginationControls();
             } catch (error) {
@@ -115,11 +115,10 @@
             }
         }
 
-        // Fetch and display searched products
+        // Search products
         async function searchProducts() {
             const query = searchInput.value.trim();
 
-            // If search input is empty, fetch and show the entire product list
             if (!query) {
                 fetchProducts();
                 return;
@@ -127,7 +126,7 @@
 
             try {
                 const response = await fetch(`${apiUrl}/search?produto=${encodeURIComponent(query)}`);
-                if (!response.ok) throw new Error('Failed to fetch products: ' + response.statusText);
+                if (!response.ok) throw new Error('Error searching products: ' + response.statusText);
                 const data = await response.json();
 
                 if (data.length > 0) {
@@ -151,16 +150,40 @@
                             </td>
                         </tr>
                     `).join('');
+                    attachDeleteEventListeners();
                 } else {
                     productList.innerHTML = `<tr><td colspan="8">No products found.</td></tr>`;
                 }
             } catch (error) {
-                console.error('Error fetching products:', error);
-                productList.innerHTML = `<tr><td colspan="8">Error fetching products: ${error.message}</td></tr>`;
+                console.error('Error searching products:', error);
+                productList.innerHTML = `<tr><td colspan="8">Error searching products: ${error.message}</td></tr>`;
             }
         }
 
-        // Display products in the table
+        // Delete product
+        async function deleteProduct(productId) {
+            try {
+                const response = await fetch(`${apiUrl}/${productId}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error(`Failed to delete product: ${response.statusText}`);
+                document.querySelector(`button[data-id="${productId}"]`).closest('tr').remove();
+                alert('Product deleted successfully!');
+            } catch (error) {
+                console.error('Error deleting product:', error);
+                alert(`Error deleting product: ${error.message}`);
+            }
+        }
+
+        function attachDeleteEventListeners() {
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const productId = button.getAttribute('data-id');
+                    if (confirm('Are you sure you want to delete this product?')) {
+                        deleteProduct(productId);
+                    }
+                });
+            });
+        }
+
         function displayProducts() {
             productList.innerHTML = products.map(product => `
                 <tr>
@@ -182,43 +205,37 @@
                     </td>
                 </tr>
             `).join('');
+            attachDeleteEventListeners();
         }
 
-        // Update pagination controls
         function updatePaginationControls() {
             paginationDiv.style.display = totalPages > 1 ? 'block' : 'none';
             pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
         }
 
-        // Event handlers for pagination buttons
         document.getElementById('firstPage').onclick = () => { currentPage = 1; fetchProducts(); };
         document.getElementById('prevPage').onclick = () => { if (currentPage > 1) currentPage--; fetchProducts(); };
         document.getElementById('nextPage').onclick = () => { if (currentPage < totalPages) currentPage++; fetchProducts(); };
         document.getElementById('lastPage').onclick = () => { currentPage = totalPages; fetchProducts(); };
 
-        // Handle sorting criteria changes
         sortSelect.addEventListener('change', () => {
             sortCriteria = sortSelect.value;
             fetchProducts();
         });
 
-        // Handle sorting order toggle
         toggleSortOrderBtn.addEventListener('click', () => {
             sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
             toggleSortOrderBtn.textContent = sortOrder.toUpperCase();
             fetchProducts();
         });
 
-        // Attach search functionality to the input
-        searchInput.addEventListener('keydown', (event) => {
+        searchInput.addEventListener('keydown', event => {
             if (event.key === 'Enter') searchProducts();
         });
 
-        // Fetch products on page load
         fetchProducts();
     });
 </script>
-
 
 </body>
 </html>
