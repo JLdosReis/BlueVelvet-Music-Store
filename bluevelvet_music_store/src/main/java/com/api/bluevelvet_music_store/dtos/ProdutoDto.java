@@ -12,13 +12,13 @@ public record ProdutoDto(
         @NotNull BigDecimal price,
         @NotNull BigDecimal discount,
 
-        @NotBlank String fullDescription,
-        @NotBlank String shortDescription,
+        String fullDescription,
+        String shortDescription,
 
         @NotBlank boolean enabled,
         @NotBlank boolean inStock,
 
-        @NotBlank BigDecimal lenght,
+        @NotBlank BigDecimal length,
         @NotBlank BigDecimal width,
         @NotBlank BigDecimal height,
         @NotBlank BigDecimal weight

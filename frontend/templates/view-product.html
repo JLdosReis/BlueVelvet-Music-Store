@@ -81,10 +81,17 @@
     </div>
 
     <div>
-        <label>Dimensions:</label>
-        <span id="dimensions">Loading...</span>
+        <label>Length:</label>
+        <span id="length">Loading...</span>
     </div>
-
+    <div>
+        <label>Width:</label>
+        <span id="width">Loading...</span>
+    </div>
+    <div>
+        <label>Height:</label>
+        <span id="height">Loading...</span>
+    </div>
     <div>
         <label>Weight:</label>
         <span id="weight">Loading...</span>
@@ -141,7 +148,9 @@
             document.getElementById('in-stock').textContent = product.inStock ? 'Yes' : 'No';
             document.getElementById('creation-time').textContent = product.creationTime || 'N/A';
             document.getElementById('update-time').textContent = product.updateTime || 'N/A';
-            document.getElementById('dimensions').textContent = product.dimensions || 'N/A';
+            document.getElementById('length').textContent = product.length || 'N/A';
+            document.getElementById('width').textContent = product.width || 'N/A';
+            document.getElementById('height').textContent = product.height || 'N/A';
             document.getElementById('weight').textContent = product.weight || 'N/A';
             document.getElementById('cost').textContent = `$${product.cost || 'N/A'}`;
 

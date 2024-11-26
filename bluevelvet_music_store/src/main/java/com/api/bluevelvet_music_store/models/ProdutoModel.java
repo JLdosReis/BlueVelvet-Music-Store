@@ -27,7 +27,7 @@ public class ProdutoModel implements Serializable {
     private boolean enabled;
     private boolean inStock;
 
-    private BigDecimal lenght;
+    private BigDecimal length;
     private BigDecimal width;
     private BigDecimal height;
     private BigDecimal weight;
@@ -112,12 +112,12 @@ public class ProdutoModel implements Serializable {
         this.inStock = inStock;
     }
 
-    public BigDecimal getLenght() {
-        return lenght;
+    public BigDecimal getLength() {
+        return length;
     }
 
-    public void setLenght(BigDecimal lenght) {
-        this.lenght = lenght;
+    public void setLength(BigDecimal length) {
+        this.length = length;
     }
 
     public BigDecimal getWidth() {
