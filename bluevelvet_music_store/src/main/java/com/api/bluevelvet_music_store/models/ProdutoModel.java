@@ -1,6 +1,7 @@
 package com.api.bluevelvet_music_store.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,6 +20,17 @@ public class ProdutoModel implements Serializable {
     private String category;
     private BigDecimal price;
     private BigDecimal discount;
+
+    private String fullDescription;
+    private String shortDescription;
+
+    private boolean enabled;
+    private boolean inStock;
+
+    private BigDecimal lenght;
+    private BigDecimal width;
+    private BigDecimal height;
+    private BigDecimal weight;
 
     public long getIdProduto() {
         return idProduto;
@@ -67,4 +79,70 @@ public class ProdutoModel implements Serializable {
     public void setDiscount(BigDecimal discount) {
         this.discount = discount;
     }
+
+    public String getFullDescription() {
+        return fullDescription;
+    }
+
+    public void setFullDescription(String fullDescription) {
+        this.fullDescription = fullDescription;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isInStock() {
+        return inStock;
+    }
+
+    public void setInStock(boolean inStock) {
+        this.inStock = inStock;
+    }
+
+    public BigDecimal getLenght() {
+        return lenght;
+    }
+
+    public void setLenght(BigDecimal lenght) {
+        this.lenght = lenght;
+    }
+
+    public BigDecimal getWidth() {
+        return width;
+    }
+
+    public void setWidth(BigDecimal width) {
+        this.width = width;
+    }
+
+    public BigDecimal getHeight() {
+        return height;
+    }
+
+    public void setHeight(BigDecimal height) {
+        this.height = height;
+    }
+
+    public BigDecimal getWeight() {
+        return weight;
+    }
+
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
+    }
 }
+
+

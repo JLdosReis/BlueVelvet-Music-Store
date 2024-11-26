@@ -10,6 +10,17 @@ public record ProdutoDto(
         @NotBlank String brand,
         @NotBlank String category,
         @NotNull BigDecimal price,
-        @NotNull BigDecimal discount
+        @NotNull BigDecimal discount,
+
+        @NotBlank String fullDescription,
+        @NotBlank String shortDescription,
+
+        @NotBlank boolean enabled,
+        @NotBlank boolean inStock,
+
+        @NotBlank BigDecimal lenght,
+        @NotBlank BigDecimal width,
+        @NotBlank BigDecimal height,
+        @NotBlank BigDecimal weight
 ) {
 }
