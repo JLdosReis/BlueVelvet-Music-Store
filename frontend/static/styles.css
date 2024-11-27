@@ -22,6 +22,7 @@
     gap: 20px;
     margin: 0;
     padding: 0;
+    transition: all 0.3s ease;
 }
 
 .nav-links li {
@@ -41,40 +42,66 @@
     border-radius: 5px;
 }
 
-
-.container {
-    width: 100%;
-    margin: auto;
-    padding-left: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-}
-
-form {
-    display: flex;
+/* Hamburger menu */
+.hamburger {
+    display: none;
     flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
 }
 
-#productControls {
-    margin-top: 15px;
-    margin-bottom: 30px;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
+.hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: #333; /* Cor visível para o hambúrguer */
+    transition: background-color 0.3s ease;
 }
 
-
-table {
-    width: 95%;
-    border-collapse: collapse; /* Ensures borders are not double-spaced */
+.hamburger:hover span {
+    background-color: #f3b500; /* Cor de hover do hambúrguer */
 }
 
-th, td {
-    border: 1px solid #ddd; /* Creates a light gray border */
-    padding: 8px; /* Adds some space inside the cells */
-    text-align: left; /* Aligns text to the left */
-}
+/* Estilos para dispositivos móveis */
+@media screen and (max-width: 768px) {
+    /* Exibe o hambúrguer no menu mobile */
+    .hamburger {
+        display: flex;
+    }
 
-/* Center-align only the images in the second column */
-td:nth-child(2) {
-    text-align: center;
+    /* Oculta os links inicialmente */
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 60px; /* Ajuste para logo abaixo do navbar */
+        left: 0;
+        width: 100%;
+        background-color: #333;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 20px 0;
+        z-index: 10; /* Garante que o menu apareça sobre outros conteúdos */
+    }
+
+    /* Quando a classe 'show' é adicionada, exibe os links */
+    .nav-links.show {
+        display: flex;
+    }
+
+    /* Estilo dos links no menu mobile */
+    .nav-links li a {
+        font-size: 18px;
+        color: #fff;
+        padding: 10px 20px;
+        text-align: center;
+    }
+
+    /* Alteração do cor de fundo dos links no mobile ao passar o mouse */
+    .nav-links li a:hover {
+        background-color: #1e1e1e;
+        border-radius: 5px;
+    }
 }
