@@ -4,7 +4,6 @@ import com.api.bluevelvet_music_store.dtos.ProdutoDto;
 import com.api.bluevelvet_music_store.models.ProdutoModel;
 import com.api.bluevelvet_music_store.service.ProdutoService;
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,8 +32,7 @@ public class ProdutoController {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("Conflito: o nome desse produto já está em uso!");
         }
-        var produtoModel = new ProdutoModel();
-        BeanUtils.copyProperties(produtoDto,produtoModel);
+        var produtoModel = produtoService.handleSave(produtoDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.save(produtoModel));
     }
 
@@ -70,8 +68,7 @@ public class ProdutoController {
         if(produtoModelOpt.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado.");
         }
-        var produtoModel = produtoModelOpt.get();
-        BeanUtils.copyProperties(produtoDto,produtoModel);
+        var produtoModel = produtoService.handleUpdate(produtoModelOpt.get(),produtoDto);
         produtoModel.setIdProduto(produtoModelOpt.get().getIdProduto());
         return ResponseEntity.status(HttpStatus.OK).body(produtoService.save(produtoModel));
     }

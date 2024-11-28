@@ -21,16 +21,26 @@ public class ProdutoModel implements Serializable {
     private BigDecimal price;
     private BigDecimal discount;
 
-    private String fullDescription;
-    private String shortDescription;
-
+    @Column(columnDefinition = "TINYINT")
     private boolean enabled;
+    @Column(columnDefinition = "TINYINT")
     private boolean inStock;
 
-    private BigDecimal length;
-    private BigDecimal width;
-    private BigDecimal height;
-    private BigDecimal weight;
+    @Column(length = 100)
+    private String shortDescription;
+    @Column(length = 500)
+    private String fullDescription;
+
+    @OneToOne(mappedBy = "produto", cascade = CascadeType.ALL)
+    private DimensoesModel dimensoes;
+
+    public DimensoesModel getDimensoes() {
+        return dimensoes;
+    }
+
+    public void setDimensoes(DimensoesModel dimensoes) {
+        this.dimensoes = dimensoes;
+    }
 
     public long getIdProduto() {
         return idProduto;
@@ -110,38 +120,6 @@ public class ProdutoModel implements Serializable {
 
     public void setInStock(boolean inStock) {
         this.inStock = inStock;
-    }
-
-    public BigDecimal getLength() {
-        return length;
-    }
-
-    public void setLength(BigDecimal length) {
-        this.length = length;
-    }
-
-    public BigDecimal getWidth() {
-        return width;
-    }
-
-    public void setWidth(BigDecimal width) {
-        this.width = width;
-    }
-
-    public BigDecimal getHeight() {
-        return height;
-    }
-
-    public void setHeight(BigDecimal height) {
-        this.height = height;
-    }
-
-    public BigDecimal getWeight() {
-        return weight;
-    }
-
-    public void setWeight(BigDecimal weight) {
-        this.weight = weight;
     }
 }
 

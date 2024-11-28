@@ -1,5 +1,6 @@
 package com.api.bluevelvet_music_store.dtos;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,15 +13,12 @@ public record ProdutoDto(
         @NotNull BigDecimal price,
         @NotNull BigDecimal discount,
 
-        String fullDescription,
-        String shortDescription,
+        @NotNull boolean enabled,
+        @NotNull boolean inStock,
 
-        @NotBlank boolean enabled,
-        @NotBlank boolean inStock,
+        @NotBlank String shortDescription,
+        @NotBlank String fullDescription,
 
-        @NotBlank BigDecimal length,
-        @NotBlank BigDecimal width,
-        @NotBlank BigDecimal height,
-        @NotBlank BigDecimal weight
+        @Valid DimensoesDto dimensoes
 ) {
 }
