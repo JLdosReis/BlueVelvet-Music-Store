@@ -70,6 +70,7 @@ public class ProdutoController {
         }
         var produtoModel = produtoService.handleUpdate(produtoModelOpt.get(),produtoDto);
         produtoModel.setIdProduto(produtoModelOpt.get().getIdProduto());
+        produtoModel.setCreatedAt(produtoModelOpt.get().getCreatedAt());
         return ResponseEntity.status(HttpStatus.OK).body(produtoService.save(produtoModel));
     }
 

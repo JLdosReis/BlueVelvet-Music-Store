@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public record ProdutoDto(
         @NotBlank String productName,
@@ -19,6 +20,7 @@ public record ProdutoDto(
         @NotBlank String shortDescription,
         @NotBlank String fullDescription,
 
-        @Valid DimensoesDto dimensoes
+        @Valid DimensoesDto dimensions,
+        @Valid List<ImagemDto> images
 ) {
 }

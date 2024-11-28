@@ -1,10 +1,12 @@
 package com.api.bluevelvet_music_store.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "TB_BLUEVELVET")
@@ -34,13 +36,11 @@ public class ProdutoModel implements Serializable {
     @OneToOne(mappedBy = "produto", cascade = CascadeType.ALL)
     private DimensoesModel dimensoes;
 
-    public DimensoesModel getDimensoes() {
-        return dimensoes;
-    }
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
+    private List<ImagemModel> imagens = new ArrayList<>();
 
-    public void setDimensoes(DimensoesModel dimensoes) {
-        this.dimensoes = dimensoes;
-    }
+    private LocalDateTime createdAt;
+    private LocalDateTime updateAt;
 
     public long getIdProduto() {
         return idProduto;
@@ -120,6 +120,38 @@ public class ProdutoModel implements Serializable {
 
     public void setInStock(boolean inStock) {
         this.inStock = inStock;
+    }
+
+    public DimensoesModel getDimensoes() {
+        return dimensoes;
+    }
+
+    public void setDimensoes(DimensoesModel dimensoes) {
+        this.dimensoes = dimensoes;
+    }
+
+    public List<ImagemModel> getImagens() {
+        return imagens;
+    }
+
+    public void setImagens(List<ImagemModel> imagens) {
+        this.imagens = imagens;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(LocalDateTime updateAt) {
+        this.updateAt = updateAt;
     }
 }
 
