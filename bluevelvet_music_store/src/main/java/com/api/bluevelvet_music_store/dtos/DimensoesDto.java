@@ -8,7 +8,9 @@ import java.math.BigDecimal;
 public record DimensoesDto(
         @NotNull BigDecimal width,
         @NotNull BigDecimal height,
+        @NotNull BigDecimal length,
         @NotNull BigDecimal weight,
-        @NotBlank String unit
+        @NotBlank String unit,
+        @NotBlank String unitWeight
 ) {
 }

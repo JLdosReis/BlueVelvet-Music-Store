@@ -102,8 +102,8 @@ public class ProdutoService {
         return produtoRepository.findById(id);
     }
 
-    public List<ProdutoModel> findByProductNameContainingIgnoreCase(String name){
-        return produtoRepository.findByProductNameContainingIgnoreCase(name);
+    public Page<ProdutoModel> searchProdutos(String name, Pageable pageable){
+        return produtoRepository.searchProdutos(name,pageable);
     }
 
     @Transactional

@@ -7,6 +7,30 @@
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
+<nav class="navbar">
+    <div class="logo">
+        <img src="images/banana.png" alt="BlueVelvet Music Store" />
+    </div>
+    <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <ul class="nav-links">
+        <li><a href="articles.html">Articles</a></li>
+        <li><a href="brands.html">Brands</a></li>
+        <li><a href="categories.html">Categories</a></li>
+        <li><a href="customers.html">Customers</a></li>
+        <li><a href="menus.html">Menus</a></li>
+        <li><a href="orders.html">Orders</a></li>
+        <li><a href="dashboard.html">Products</a></li>
+        <li><a href="sales-report.html">Sales Report</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="shipping.html">Shipping</a></li>
+        <li><a href="users.html">Users</a></li>
+    </ul>
+</nav>
+
 <h1>Product Details</h1>
 
 <div id="product-details" class="container">
@@ -98,11 +122,6 @@
     </div>
 
     <div>
-        <label>Cost:</label>
-        <span id="cost">Loading...</span>
-    </div>
-
-    <div>
         <label>Product Details:</label>
         <ul id="product-details-list">
             <!-- Dynamic product details list -->
@@ -113,6 +132,16 @@
 <button onclick="window.history.back()">Back to Dashboard</button>
 
 <script>
+    // Show/hide navigation menu on mobile
+    document.addEventListener("DOMContentLoaded", () => {
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+
+        hamburger.addEventListener("click", () => {
+            navLinks.classList.toggle("show");
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', async () => {
         const apiUrl = 'http://localhost:8080/produtos';
 
@@ -148,11 +177,10 @@
             document.getElementById('in-stock').textContent = product.inStock ? 'Yes' : 'No';
             document.getElementById('creation-time').textContent = product.creationTime || 'N/A';
             document.getElementById('update-time').textContent = product.updateTime || 'N/A';
-            document.getElementById('length').textContent = product.length || 'N/A';
-            document.getElementById('width').textContent = product.width || 'N/A';
-            document.getElementById('height').textContent = product.height || 'N/A';
-            document.getElementById('weight').textContent = product.weight || 'N/A';
-            document.getElementById('cost').textContent = `$${product.cost || 'N/A'}`;
+            document.getElementById('length').textContent = `${product.dimensoes.length || 'N/A'} ${product.dimensoes.unit || ''}`;
+            document.getElementById('width').textContent =  `${product.dimensoes.width || 'N/A'} ${product.dimensoes.unit || ''}`;
+            document.getElementById('height').textContent = `${product.dimensoes.height || 'N/A'} ${product.dimensoes.unit || ''}`;
+            document.getElementById('weight').textContent = `${product.dimensoes.weight || 'N/A'} ${product.dimensoes.unitWeight || ''}`;
 
             // Populate additional product details
             const detailsList = document.getElementById('product-details-list');

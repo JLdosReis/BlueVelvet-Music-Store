@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -43,8 +42,10 @@ public class ProdutoController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ProdutoModel>> getProdutosByName(@RequestParam String produto){
-        List<ProdutoModel> produtoModels = produtoService.findByProductNameContainingIgnoreCase(produto);
+    public ResponseEntity<Page<ProdutoModel>> getProdutosByParam(@RequestParam String name,
+                                                                 @PageableDefault(sort = "idProduto", direction = Sort.Direction.ASC)
+                                                                 Pageable pageable){
+        Page<ProdutoModel> produtoModels = produtoService.searchProdutos(name,pageable);
         if(produtoModels.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(produtoModels);
         }
