@@ -89,7 +89,7 @@ td:nth-child(2) {
     display: block;
     height: 3px;
     width: 100%;
-    background-color: #333; /* Cor visível para o hambúrguer */
+    background-color: #515151; /* Cor visível para o hambúrguer */
     transition: background-color 0.3s ease;
 }
 
@@ -111,7 +111,7 @@ td:nth-child(2) {
         top: 60px; /* Ajuste para logo abaixo do navbar */
         left: 0;
         width: 100%;
-        background-color: #333;
+        background-color: #ffffff;
         flex-direction: column;
         align-items: center;
         gap: 10px;
@@ -127,7 +127,7 @@ td:nth-child(2) {
     /* Estilo dos links no menu mobile */
     .nav-links li a {
         font-size: 18px;
-        color: #fff;
+        color: #040202;
         padding: 10px 20px;
         text-align: center;
     }
@@ -136,5 +136,79 @@ td:nth-child(2) {
     .nav-links li a:hover {
         background-color: #1e1e1e;
         border-radius: 5px;
+    }
+}
+
+/* Adicionado para a responsividade da dashboard.html pelo Gabriel */
+
+/* Ajuste geral do container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Controle de produtos responsivo */
+#productControls {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Tabela responsiva */
+table {
+    width: 100%; /* Ajusta ao tamanho do container */
+    overflow-x: auto; /* Permite rolar em dispositivos menores */
+}
+
+th, td {
+    font-size: 14px; /* Reduz a fonte em telas menores */
+}
+
+td img {
+    max-width: 100px; /* Imagens menores */
+    height: auto;
+}
+
+/* Responsividade adicional */
+@media screen and (max-width: 768px) {
+    #productControls {
+        flex-direction: column; /* Alinha os controles em uma coluna */
+        align-items: center;
+    }
+
+    table th, table td {
+        font-size: 12px; /* Reduz mais o tamanho da fonte */
+        padding: 6px;
+    }
+
+    td img {
+        max-width: 75px;
+    }
+
+    h1, h2 {
+        font-size: 18px; /* Ajuste de títulos */
+    }
+}
+
+/* Responsividade extrema */
+@media screen and (max-width: 576px) {
+    h1, h2 {
+        font-size: 16px;
+        text-align: center;
+    }
+
+    #productControls {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    table th, table td {
+        font-size: 10px;
+        padding: 4px;
+    }
+
+    td img {
+        max-width: 50px;
     }
 }

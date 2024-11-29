@@ -91,8 +91,7 @@
         hamburger.addEventListener("click", () => {
             navLinks.classList.toggle("show");
         });
-    });
-    document.addEventListener('DOMContentLoaded', () => {
+
         const apiUrl = 'http://localhost:8080/produtos';
         const productList = document.getElementById('productList');
         const searchInput = document.getElementById('searchInput');
@@ -106,6 +105,14 @@
         let totalPages = 1;
         let sortCriteria = sortSelect.value; // Default sorting criterion
         let sortOrder = 'asc'; // Default sorting order
+
+        // Reset product list
+        async function resetProductList() {
+            // Implementando - Gabriel
+        }
+
+        // Event listener para o botão de reset
+        document.getElementById('resetProductsBtn').addEventListener('click', resetProductList);
 
         // Fetch products from API
         async function fetchProducts() {
@@ -227,6 +234,8 @@
             paginationDiv.style.display = totalPages > 1 ? 'block' : 'none';
             pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
         }
+
+
 
         // Event handlers for pagination buttons
         document.getElementById('firstPage').onclick = () => { currentPage = 1; fetchProducts(); };
