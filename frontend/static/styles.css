@@ -1,4 +1,15 @@
 /* Estilo da barra de navegação */
+body{
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content{
+    flex:1;
+}
+
 .navbar {
     display: flex;
     align-items: center;
@@ -211,4 +222,11 @@ td img {
     td img {
         max-width: 50px;
     }
+}
+
+.footer-container {
+    background-color: #98a7ad;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
 }
