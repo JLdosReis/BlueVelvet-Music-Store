@@ -23,7 +23,7 @@
         <li><a href="customers.html">Customers</a></li>
         <li><a href="menus.html">Menus</a></li>
         <li><a href="orders.html">Orders</a></li>
-        <li><a href="dashboard.html">Products</a></li>
+        <li><a href="dashboard.html">Users</a></li>
         <li><a href="sales-report.html">Sales Report</a></li>
         <li><a href="settings.html">Settings</a></li>
         <li><a href="shipping.html">Shipping</a></li>
@@ -31,9 +31,249 @@
     </ul>
 </nav>
 <h1>Implementar o Users</h1>
-</body>
-</html>
+
+<div class="container">
+    <h1>BlueVelvet Music Store</h1>
+    <h2>User Management</h2>
+
+    <div>Welcome, Atticus (Administrator)
+        <button id="logoutBtn">Logout</button>
+    </div>
+
+    <div id="UserControls">
+        <button id="resetUserBtn">Reset Users to Initial State</button>
+        <a href="create-user.html"><button id="addUserBtn">Add User</button></a>
+        <input type="text" id="searchInput" placeholder="Search users...">
+        <div id="sortSection">
+            <select id="sortSelect">
+                <option value="userName">Sort by Name</option>
+                <option value="idUser">Sort by ID</option>
+                <option value="email">Sort by Brand</option>
+            </select>
+            <button id="toggleSortOrderBtn">ASC</button>
+        </div>
+    </div>
+
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAcElEQVQYlWO8eOz3fwY8gGlqsRk+eQbG35/M/jMwMDBcu3IUuwn37kNs0NKxxpCcWmzGwHjqsNF/fj5mBiVFRgZkk2AaGC8e+/3/519zBmRFMHDv/n+IAgYGBgaYImTw4+sxBhYYh535JMOPr5iOBACYHilKGNpf0wAAAABJRU5ErkJggg==">
+
+    <table id="userTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="userList">
+        <!-- Dynamic rows will be inserted here -->
+        </tbody>
+    </table>
+
+    <div id="pagination">
+        <button id="firstPage">First</button>
+        <button id="prevPage">Prev</button>
+        <span id="pageIndicator"></span>
+        <button id="nextPage">Next</button>
+        <button id="lastPage">Last</button>
+    </div>
+</div>
+
+<div id="footer-container"></div>
+
 <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+
+        hamburger.addEventListener("click", () => {
+            navLinks.classList.toggle("show");
+        });
+
+        const apiUrl = 'http://localhost:8080/usuarios';
+        const userList = document.getElementById('userList');
+        const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        const toggleSortOrderBtn = document.getElementById('toggleSortOrderBtn');
+        const pageIndicator = document.getElementById('pageIndicator');
+        const paginationDiv = document.getElementById('pagination');
+
+        let users = [];
+        let currentPage = 1;
+        let totalPages = 1;
+        let sortCriteria = sortSelect.value; // Default sorting criterion
+        let sortOrder = 'asc'; // Default sorting order
+
+        // Reset user list
+        async function resetUserList() {
+            // Implementando - Gabriel
+        }
+
+        // Event listener para o botão de reset
+        document.getElementById('resetUsersBtn').addEventListener('click', resetUserList);
+
+        // Fetch users from API
+        async function fetchUsers() {
+            try {
+                const queryParams = new URLSearchParams({
+                    page: currentPage - 1,
+                    size: 10, // Default items per page
+                    sort: `${sortCriteria},${sortOrder}`
+                });
+                const response = await fetch(`${apiUrl}?${queryParams}`);
+                if (!response.ok) throw new Error('Error fetching users: ' + response.statusText);
+                const data = await response.json();
+                users = data.content;
+                totalPages = data.page.totalPages;
+                displayUsers();
+                updatePaginationControls();
+            } catch (error) {
+                console.error(error);
+                userList.innerHTML = `<tr><td colspan="8">Error fetching users: ${error.message}</td></tr>`;
+            }
+        }
+
+        // Search users
+        async function searchUser() {
+            const query = searchInput.value.trim();
+
+            if (!query) {
+                fetchUsers();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiUrl}/search?produto=${encodeURIComponent(query)}`);
+                if (!response.ok) throw new Error('Error searching users: ' + response.statusText);
+                const data = await response.json();
+
+                if (data.length > 0) {
+                    userList.innerHTML = data.map(user => `
+                        <tr>
+                            <td>${user.idUser}</td>
+                            <td><img src="${user.mainImage}" alt="${user.userName}"></td>
+                            <td>${user.userName}</td>
+                            <td>${user.email}</td>
+                            <td>
+                                <a href="view-user.html?id=${user.idProduto}">
+                                    <button class="details-btn">View</button>
+                                </a>
+                                <a href="edit-user.html?id=${user.idProduto}">
+                                    <button class="edit-btn">Edit</button>
+                                </a>
+                                <button class="delete-btn" data-id="${user.idProduto}">Delete</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                    attachDeleteEventListeners();
+                } else {
+                    userList.innerHTML = `<tr><td colspan="8">No users found.</td></tr>`;
+                }
+            } catch (error) {
+                console.error('Error searching users:', error);
+                userList.innerHTML = `<tr><td colspan="8">Error searching users: ${error.message}</td></tr>`;
+            }
+        }
+
+        // Delete user
+        async function deleteUser(userId) {
+            try {
+                const response = await fetch(`${apiUrl}/${userId}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error(`Failed to delete user: ${response.statusText}`);
+                document.querySelector(`button[data-id="${userId}"]`).closest('tr').remove();
+                alert('User deleted successfully!');
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                alert(`Error deleting user: ${error.message}`);
+            }
+        }
+
+        function attachDeleteEventListeners() {
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const userId = button.getAttribute('data-id');
+                    if (confirm('Are you sure you want to delete this user?')) {
+                        deleteUser(userId);
+                    }
+                });
+            });
+        }
+
+        function displayUsers() {
+            userList.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.idUser}</td>
+                    <td><img src="${user.mainImage}" alt="${user.userName}"></td>
+                    <td>${user.userName}</td>
+                    <td>${user.brand}</td>
+                    <td>${user.category}</td>
+                    <td>${user.price}</td>
+                    <td>${user.discount}</td>
+                    <td>
+                        <a href="view-user.html?id=${user.idProduto}">
+                            <button class="details-btn">View</button>
+                        </a>
+                        <a href="edit-user.html?id=${user.idProduto}">
+                            <button class="edit-btn">Edit</button>
+                        </a>
+                        <button class="delete-btn" data-id="${user.idProduto}">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+            attachDeleteEventListeners();
+        }
+
+        //
+        // Update pagination controls
+        function updatePaginationControls() {
+            paginationDiv.style.display = totalPages > 1 ? 'block' : 'none';
+            pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
+        }
+
+
+
+        // Event handlers for pagination buttons
+        document.getElementById('firstPage').onclick = () => { currentPage = 1; fetchUsers(); };
+        document.getElementById('prevPage').onclick = () => { if (currentPage > 1) currentPage--; fetchUsers(); };
+        document.getElementById('nextPage').onclick = () => { if (currentPage < totalPages) currentPage++; fetchUsers(); };
+        document.getElementById('lastPage').onclick = () => { currentPage = totalPages; fetchUsers(); };
+
+        //
+
+        sortSelect.addEventListener('change', () => {
+            sortCriteria = sortSelect.value;
+            fetchUsers();
+        });
+
+        toggleSortOrderBtn.addEventListener('click', () => {
+            sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+            toggleSortOrderBtn.textContent = sortOrder.toUpperCase();
+            fetchUsers();
+        });
+
+        searchInput.addEventListener('keydown', event => {
+            if (event.key === 'Enter') searchUsers();
+        });
+
+        fetchUsers();
+    });
+
+
+
+    // Carrega o conteúdo do footer.html no div com ID "footer-container"
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            })
+            .catch(error => console.error('Erro ao carregar o footer:', error));
+    });
+
     // Show/hide navigation menu on mobile
     document.addEventListener("DOMContentLoaded", () => {
         const hamburger = document.querySelector(".hamburger");
@@ -44,3 +284,6 @@
         });
     });
 </script>
+
+</body>
+</html>
