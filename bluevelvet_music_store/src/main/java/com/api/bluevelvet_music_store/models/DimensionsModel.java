@@ -2,33 +2,30 @@ package com.api.bluevelvet_music_store.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "TB_DIMENSOES")
-public class DimensoesModel implements Serializable {
+public class DimensionsModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private BigDecimal length;
     private BigDecimal width;
     private BigDecimal height;
-
-    private BigDecimal length;
     private BigDecimal weight;
-
     private String unit;
     private String unitWeight;
 
     @OneToOne
-    @JoinColumn(name = "produto_id", referencedColumnName = "idProduto")
+    @JoinColumn(name = "produto_id", referencedColumnName = "idProduct")
     @JsonIgnore
-    private ProdutoModel produto;
+    private ProductModel produto;
 
     public long getId() {
         return id;
@@ -36,6 +33,14 @@ public class DimensoesModel implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public BigDecimal getLength() {
+        return length;
+    }
+
+    public void setLength(BigDecimal length) {
+        this.length = length;
     }
 
     public BigDecimal getWidth() {
@@ -52,14 +57,6 @@ public class DimensoesModel implements Serializable {
 
     public void setHeight(BigDecimal height) {
         this.height = height;
-    }
-
-    public BigDecimal getLength() {
-        return length;
-    }
-
-    public void setLength(BigDecimal length) {
-        this.length = length;
     }
 
     public BigDecimal getWeight() {
@@ -86,11 +83,11 @@ public class DimensoesModel implements Serializable {
         this.unitWeight = unitWeight;
     }
 
-    public ProdutoModel getProduto() {
+    public ProductModel getProduto() {
         return produto;
     }
 
-    public void setProduto(ProdutoModel produto) {
+    public void setProduto(ProductModel produto) {
         this.produto = produto;
     }
 }
