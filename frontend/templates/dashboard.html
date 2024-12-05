@@ -154,7 +154,7 @@
                     productList.innerHTML = data.map(product => `
                         <tr>
                             <td>${product.idProduto}</td>
-                            <td><img src="${product.imageURL}" alt="${product.productName}" style="width: 100px; height: 100px;"></td>
+                            <td><img src="${product.mainImage}" alt="${product.productName}" style="width: 100px; height: 100px;"></td>
                             <td>${product.productName}</td>
                             <td>${product.brand}</td>
                             <td>${product.category}</td>
@@ -208,18 +208,18 @@
         function displayProducts() {
             productList.innerHTML = products.map(product => `
                 <tr>
-                    <td>${product.idProduto}</td>
-                    <td><img src="${product.imageURL}" alt="${product.productName}" style="width: 100px; height: 100px;"></td>
+                    <td>${product.idProduct}</td>
+                    <td><img src="${product.mainImage}" alt="${product.productName}" style="width: 100px; height: 100px;"></td>
                     <td>${product.productName}</td>
                     <td>${product.brand}</td>
                     <td>${product.category}</td>
                     <td>${product.price}</td>
                     <td>${product.discount}</td>
                     <td>
-                        <a href="view-product.html?id=${product.idProduto}">
+                        <a href="view-product.html?id=${product.idProduct}">
                             <button class="details-btn">View</button>
                         </a>
-                        <a href="edit-product.html?id=${product.idProduto}">
+                        <a href="edit-product.html?id=${product.idProduct}">
                             <button class="edit-btn">Edit</button>
                         </a>
                         <button class="delete-btn" data-id="${product.idProduto}">Delete</button>
