@@ -122,11 +122,6 @@
     </div>
 
     <div>
-        <label>Cost:</label>
-        <span id="cost">Loading...</span>
-    </div>
-
-    <div>
         <label>Product Details:</label>
         <ul id="product-details-list">
             <!-- Dynamic product details list -->
@@ -182,11 +177,10 @@
             document.getElementById('in-stock').textContent = product.inStock ? 'Yes' : 'No';
             document.getElementById('creation-time').textContent = product.creationTime || 'N/A';
             document.getElementById('update-time').textContent = product.updateTime || 'N/A';
-            document.getElementById('length').textContent = product.length || 'N/A';
-            document.getElementById('width').textContent = product.width || 'N/A';
-            document.getElementById('height').textContent = product.height || 'N/A';
-            document.getElementById('weight').textContent = product.weight || 'N/A';
-            document.getElementById('cost').textContent = `$${product.cost || 'N/A'}`;
+            document.getElementById('length').textContent = `${product.dimensoes.length || 'N/A'} ${product.dimensoes.unit || ''}`;
+            document.getElementById('width').textContent =  `${product.dimensoes.width || 'N/A'} ${product.dimensoes.unit || ''}`;
+            document.getElementById('height').textContent = `${product.dimensoes.height || 'N/A'} ${product.dimensoes.unit || ''}`;
+            document.getElementById('weight').textContent = `${product.dimensoes.weight || 'N/A'} ${product.dimensoes.unitWeight || ''}`;
 
             // Populate additional product details
             const detailsList = document.getElementById('product-details-list');

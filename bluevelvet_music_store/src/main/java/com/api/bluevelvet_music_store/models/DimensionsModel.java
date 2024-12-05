@@ -8,30 +8,24 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "TB_DIMENSOES")
-public class DimensoesModel implements Serializable {
+public class DimensionsModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private BigDecimal length;
     private BigDecimal width;
     private BigDecimal height;
     private BigDecimal weight;
     private String unit;
+    private String unitWeight;
 
     @OneToOne
-    @JoinColumn(name = "produto_id", referencedColumnName = "idProduto")
+    @JoinColumn(name = "produto_id", referencedColumnName = "idProduct")
     @JsonIgnore
-    private ProdutoModel produto;
-
-    public ProdutoModel getProduto() {
-        return produto;
-    }
-
-    public void setProduto(ProdutoModel produto) {
-        this.produto = produto;
-    }
+    private ProductModel produto;
 
     public long getId() {
         return id;
@@ -39,6 +33,14 @@ public class DimensoesModel implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public BigDecimal getLength() {
+        return length;
+    }
+
+    public void setLength(BigDecimal length) {
+        this.length = length;
     }
 
     public BigDecimal getWidth() {
@@ -71,5 +73,21 @@ public class DimensoesModel implements Serializable {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public String getUnitWeight() {
+        return unitWeight;
+    }
+
+    public void setUnitWeight(String unitWeight) {
+        this.unitWeight = unitWeight;
+    }
+
+    public ProductModel getProduto() {
+        return produto;
+    }
+
+    public void setProduto(ProductModel produto) {
+        this.produto = produto;
     }
 }
