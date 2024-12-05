@@ -57,7 +57,7 @@ public class ProductService {
     public ProductModel copyProperties(ProductDto productDto, ProductModel productModel){
 
         BeanUtils.copyProperties(productDto, productModel,"dimensions",
-                "mainImage","featuredImages");
+                "mainImage","featuredImages","details");
         productModel.setMainImage(productDto.mainImage());
 
         DimensionsModel dimensions;
