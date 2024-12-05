@@ -7,6 +7,31 @@
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
+<div class="main-content">
+<nav class="navbar">
+    <div class="logo">
+        <img src="images/banana.png" alt="BlueVelvet Music Store" />
+    </div>
+    <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <ul class="nav-links">
+        <li><a href="articles.html">Articles</a></li>
+        <li><a href="brands.html">Brands</a></li>
+        <li><a href="categories.html">Categories</a></li>
+        <li><a href="customers.html">Customers</a></li>
+        <li><a href="menus.html">Menus</a></li>
+        <li><a href="orders.html">Orders</a></li>
+        <li><a href="dashboard.html">Products</a></li>
+        <li><a href="sales-report.html">Sales Report</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="shipping.html">Shipping</a></li>
+        <li><a href="users.html">Users</a></li>
+    </ul>
+</nav>
+
 <h1>Product Details</h1>
 
 <div id="product-details" class="container">
@@ -81,18 +106,20 @@
     </div>
 
     <div>
-        <label>Dimensions:</label>
-        <span id="dimensions">Loading...</span>
+        <label>Length:</label>
+        <span id="length">Loading...</span>
     </div>
-
+    <div>
+        <label>Width:</label>
+        <span id="width">Loading...</span>
+    </div>
+    <div>
+        <label>Height:</label>
+        <span id="height">Loading...</span>
+    </div>
     <div>
         <label>Weight:</label>
         <span id="weight">Loading...</span>
-    </div>
-
-    <div>
-        <label>Cost:</label>
-        <span id="cost">Loading...</span>
     </div>
 
     <div>
@@ -106,6 +133,16 @@
 <button onclick="window.history.back()">Back to Dashboard</button>
 
 <script>
+    // Show/hide navigation menu on mobile
+    document.addEventListener("DOMContentLoaded", () => {
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+
+        hamburger.addEventListener("click", () => {
+            navLinks.classList.toggle("show");
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', async () => {
         const apiUrl = 'http://localhost:8080/produtos';
 
@@ -126,31 +163,55 @@
             const product = await response.json();
 
             // Populate the product details in the HTML
-            document.getElementById('product-id').textContent = product.idProduto;
+            document.getElementById('product-id').textContent = product.idProduct;
             document.getElementById('product-name').textContent = product.productName;
             document.getElementById('category').textContent = product.category;
             document.getElementById('brand').textContent = product.brand;
-            document.getElementById('main-image').src = product.imageURL || 'images/default-product.png';
-            document.getElementById('main-image').style.display = 'block'; // Show the image if available
+
+            // Populate main image
+            const mainImage = document.getElementById('main-image');
+            mainImage.src = product.mainImage || 'images/default-product.png';
+            mainImage.style.display = 'block';
+
+            // Populate featured images
+            const featuredImagesContainer = document.createElement('div');
+            featuredImagesContainer.id = 'featured-images';
+            document.getElementById('product-details').appendChild(featuredImagesContainer);
+
+            if (product.featuredImages && product.featuredImages.length > 0) {
+                product.featuredImages.forEach((imageObj, index) => {
+                    const img = document.createElement('img');
+                    img.src = imageObj.image || 'images/default-product.png';
+                    img.alt = `Featured Image ${index + 1}`;
+                    img.style.width = '100px';
+                    img.style.height = '100px';
+                    img.style.margin = '5px';
+                    featuredImagesContainer.appendChild(img);
+                });
+            } else {
+                featuredImagesContainer.textContent = 'No featured images available.';
+            }
+
             document.getElementById('short-description').textContent = product.shortDescription || 'N/A';
             document.getElementById('full-description').textContent = product.fullDescription || 'N/A';
             document.getElementById('list-price').textContent = `$${product.price}`;
-            document.getElementById('discount').textContent = `$${product.discount} (${Math.round(((product.discount * 100) / product.price)*100)/100}%  OFF)`;
+            document.getElementById('discount').textContent = `$${product.discount} (${Math.round(((product.discount * 100) / product.price)*100)/100}% OFF)`;
             document.getElementById('net-price').textContent = `$${product.price - product.discount}`;
             document.getElementById('enabled').textContent = product.enabled ? 'Yes' : 'No';
             document.getElementById('in-stock').textContent = product.inStock ? 'Yes' : 'No';
-            document.getElementById('creation-time').textContent = product.creationTime || 'N/A';
-            document.getElementById('update-time').textContent = product.updateTime || 'N/A';
-            document.getElementById('dimensions').textContent = product.dimensions || 'N/A';
-            document.getElementById('weight').textContent = product.weight || 'N/A';
-            document.getElementById('cost').textContent = `$${product.cost || 'N/A'}`;
 
-            // Populate additional product details
+            // Dimensions
+            document.getElementById('length').textContent = `${product.dimensions.length || 'N/A'} ${product.dimensions.unit || ''}`;
+            document.getElementById('width').textContent = `${product.dimensions.width || 'N/A'} ${product.dimensions.unit || ''}`;
+            document.getElementById('height').textContent = `${product.dimensions.height || 'N/A'} ${product.dimensions.unit || ''}`;
+            document.getElementById('weight').textContent = `${product.dimensions.weight || 'N/A'} ${product.dimensions.unitWeight || ''}`;
+
+            // Additional details
             const detailsList = document.getElementById('product-details-list');
             if (product.details && product.details.length > 0) {
                 product.details.forEach(detail => {
                     const listItem = document.createElement('li');
-                    listItem.textContent = detail;
+                    listItem.textContent = `${detail.name}: ${detail.value}`;
                     detailsList.appendChild(listItem);
                 });
             } else {
@@ -160,6 +221,21 @@
             console.error(error);
             alert('Error loading product details. Please try again later.');
         }
+    });
+
+
+</script>
+</div>
+<div id="footer-container"></div>
+<script>
+    // Carrega o conteúdo do footer.html no div com ID "footer-container"
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            })
+            .catch(error => console.error('Erro ao carregar o footer:', error));
     });
 </script>
 </body>

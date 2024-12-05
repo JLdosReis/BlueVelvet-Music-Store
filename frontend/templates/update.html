@@ -11,18 +11,23 @@
     <div class="logo">
         <img src="images/banana.png" alt="BlueVelvet Music Store" />
     </div>
+    <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
     <ul class="nav-links">
-        <li><a href="#">Articles</a></li>
-        <li><a href="#">Brands</a></li>
-        <li><a href="#">Categories</a></li>
-        <li><a href="#">Customers</a></li>
-        <li><a href="#">Menus</a></li>
-        <li><a href="#">Orders</a></li>
+        <li><a href="articles.html">Articles</a></li>
+        <li><a href="brands.html">Brands</a></li>
+        <li><a href="categories.html">Categories</a></li>
+        <li><a href="customers.html">Customers</a></li>
+        <li><a href="menus.html">Menus</a></li>
+        <li><a href="orders.html">Orders</a></li>
         <li><a href="dashboard.html">Products</a></li>
-        <li><a href="#">Sales Report</a></li>
-        <li><a href="#">Settings</a></li>
-        <li><a href="#">Shipping</a></li>
-        <li><a href="#">Users</a></li>
+        <li><a href="sales-report.html">Sales Report</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="shipping.html">Shipping</a></li>
+        <li><a href="users.html">Users</a></li>
     </ul>
 </nav>
 
@@ -74,6 +79,15 @@
 </div>
 
 <script>
+    // Show/hide navigation menu on mobile
+    document.addEventListener("DOMContentLoaded", () => {
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+
+        hamburger.addEventListener("click", () => {
+            navLinks.classList.toggle("show");
+        });
+    });
     document.addEventListener('DOMContentLoaded', () => {
         const customAttributesContainer = document.getElementById('customAttributesContainer');
         const addCustomAttributeBtn = document.getElementById('addCustomAttributeBtn');
@@ -142,6 +156,18 @@
                     alert('Failed to update product.');
                 });
         });
+    });
+</script>
+<div id="footer-container"></div>
+<script>
+    // Carrega o conteúdo do footer.html no div com ID "footer-container"
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            })
+            .catch(error => console.error('Erro ao carregar o footer:', error));
     });
 </script>
 </body>

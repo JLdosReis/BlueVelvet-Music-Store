@@ -42,5 +42,17 @@
         de fornecer correta navegação entre as páginas web. 
     -->
     <script src="script.js"></script>
+    <div id="footer-container"></div>
+    <script>
+        // Carrega o conteúdo do footer.html no div com ID "footer-container"
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('footer.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('footer-container').innerHTML = html;
+                })
+                .catch(error => console.error('Erro ao carregar o footer:', error));
+        });
+    </script>
 </body>
 </html>
