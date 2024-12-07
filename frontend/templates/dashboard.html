@@ -8,82 +8,84 @@
 </head>
 <body>
 <div class="main-content">
-<nav class="navbar">
-    <div class="logo">
-        <img src="images/banana.png" alt="BlueVelvet Music Store" />
-    </div>
-    <div class="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-    <ul class="nav-links">
-        <li><a href="articles.html">Articles</a></li>
-        <li><a href="brands.html">Brands</a></li>
-        <li><a href="categories.html">Categories</a></li>
-        <li><a href="customers.html">Customers</a></li>
-        <li><a href="menus.html">Menus</a></li>
-        <li><a href="orders.html">Orders</a></li>
-        <li><a href="dashboard.html">Products</a></li>
-        <li><a href="sales-report.html">Sales Report</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="shipping.html">Shipping</a></li>
-        <li><a href="users.html">Users</a></li>
-    </ul>
-</nav>
-
-<div class="container">
-    <h1>BlueVelvet Music Store</h1>
-    <h2>Product Management</h2>
-
-    <div>Welcome, Atticus (Administrator)
-    <button id="logoutBtn">Logout</button>
-    </div>
-
-    <div id="productControls">
-        <button id="resetProductsBtn">Reset Products</button>
-        <a href="create-product.html"><button id="addProductBtn">Add Product</button></a>
-        <input type="text" id="searchInput" placeholder="Search products...">
-        <div id="sortSection">
-            <select id="sortSelect">
-                <option value="productName">Sort by Name</option>
-                <option value="idProduct">Sort by ID</option>
-                <option value="brand">Sort by Brand</option>
-                <option value="category">Sort by Category</option>
-                <option value="price">Sort by Price</option>
-                <option value="discount">Sort by Discount</option>
-            </select>
-            <button id="toggleSortOrderBtn">ASC</button>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="images/banana.png" alt="BlueVelvet Music Store" />
         </div>
-    </div>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="brands.html">Brands</a></li>
+            <li><a href="categories.html">Categories</a></li>
+            <li><a href="customers.html">Customers</a></li>
+            <li><a href="menus.html">Menus</a></li>
+            <li><a href="orders.html">Orders</a></li>
+            <li><a href="dashboard.html">Products</a></li>
+            <li><a href="sales-report.html">Sales Report</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="shipping.html">Shipping</a></li>
+            <li><a href="users.html">Users</a></li>
+        </ul>
+    </nav>
 
-    <table id="productTable">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Discount</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody id="productList">
-        <!-- Dynamic rows will be inserted here -->
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>BlueVelvet Music Store</h1>
+        <h2>Product Management</h2>
 
-    <div id="pagination">
-        <button id="firstPage">First</button>
-        <button id="prevPage">Prev</button>
-        <span id="pageIndicator"></span>
-        <button id="nextPage">Next</button>
-        <button id="lastPage">Last</button>
+        <div>Welcome, Atticus (Administrator)
+        <button id="logoutBtn">Logout</button>
+        </div>
+
+        <div id="productControls">
+            <button id="resetProductsBtn">Reset Products</button>
+            <a href="create-product.html"><button id="addProductBtn">Add Product</button></a>
+            <input type="text" id="searchInput" placeholder="Search products...">
+            <div id="sortSection">
+                <select id="sortSelect">
+                    <option value="productName">Sort by Name</option>
+                    <option value="idProduct">Sort by ID</option>
+                    <option value="brand">Sort by Brand</option>
+                    <option value="category">Sort by Category</option>
+                    <option value="price">Sort by Price</option>
+                    <option value="discount">Sort by Discount</option>
+                </select>
+                <button id="toggleSortOrderBtn">ASC</button>
+            </div>
+        </div>
+
+        <table id="productTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Discount</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="productList">
+            <!-- Dynamic rows will be inserted here -->
+            </tbody>
+        </table>
+
+        <div id="pagination">
+            <button id="firstPage">First</button>
+            <button id="prevPage">Prev</button>
+            <span id="pageIndicator"></span>
+            <button id="nextPage">Next</button>
+            <button id="lastPage">Last</button>
+        </div>
     </div>
 </div>
 
+<div id="footer-container"></div>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const hamburger = document.querySelector(".hamburger");
@@ -153,7 +155,7 @@
                 if (data.length > 0) {
                     productList.innerHTML = data.map(product => `
                         <tr>
-                            <td>${product.idProduto}</td>
+                            <td>${product.idProduct}</td>
                             <td><img src="${product.mainImage}" alt="${product.productName}" style="width: 100px; height: 100px;"></td>
                             <td>${product.productName}</td>
                             <td>${product.brand}</td>
@@ -161,13 +163,13 @@
                             <td>${product.price}</td>
                             <td>${product.discount}</td>
                             <td>
-                                <a href="view-product.html?id=${product.idProduto}">
+                                <a href="view-product.html?id=${product.idProduct}">
                                     <button class="details-btn">View</button>
                                 </a>
-                                <a href="edit-product.html?id=${product.idProduto}">
+                                <a href="edit-product.html?id=${product.idProduct}">
                                     <button class="edit-btn">Edit</button>
                                 </a>
-                                <button class="delete-btn" data-id="${product.idProduto}">Delete</button>
+                                <button class="delete-btn" data-id="${product.idProduct}">Delete</button>
                             </td>
                         </tr>
                     `).join('');
@@ -222,7 +224,7 @@
                         <a href="edit-product.html?id=${product.idProduct}">
                             <button class="edit-btn">Edit</button>
                         </a>
-                        <button class="delete-btn" data-id="${product.idProduto}">Delete</button>
+                        <button class="delete-btn" data-id="${product.idProduct}">Delete</button>
                     </td>
                 </tr>
             `).join('');
@@ -263,20 +265,15 @@
 
         fetchProducts();
     });
-</script>
-</div>
-<div id="footer-container"></div>
-<script>
     // Carrega o conteúdo do footer.html no div com ID "footer-container"
-    document.addEventListener('DOMContentLoaded', () => {
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('footer-container').innerHTML = html;
-            })
-            .catch(error => console.error('Erro ao carregar o footer:', error));
-    });
+    fetch('footer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('footer-container').innerHTML = html;
+        })
+        .catch(error => console.error('Erro ao carregar o footer:', error));
 </script>
+
 </body>
 </html>
 
