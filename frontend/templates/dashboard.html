@@ -173,13 +173,12 @@
             } catch (error) {
                 console.error('Error:', error);
             }
-            fetchProducts();
         }
 
         // Event listener para o botão de reset
         document.getElementById('resetProductsBtn').addEventListener('click', resetProductList);
 
-        // Event listener para o botão de reset
+        // Event listener para o botão de adicionar
         document.getElementById('sendProductBtn').addEventListener('click', sendProduct);
 
         // Fetch products from API
