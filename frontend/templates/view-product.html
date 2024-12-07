@@ -180,17 +180,27 @@
             document.getElementById('product-details').appendChild(featuredImagesContainer);
 
             if (product.featuredImages && product.featuredImages.length > 0) {
-                product.featuredImages.forEach((imageObj, index) => {
-                    const img = document.createElement('img');
-                    img.src = imageObj.image || 'images/default-product.png';
-                    img.alt = `Featured Image ${index + 1}`;
-                    img.style.width = '100px';
-                    img.style.height = '100px';
-                    img.style.margin = '5px';
-                    featuredImagesContainer.appendChild(img);
-                });
+                const featuredImagesContainer = document.createElement('div');
+                featuredImagesContainer.id = 'featured-images';
+                document.getElementById('product-details').appendChild(featuredImagesContainer);
+
+                // Iterar sobre as imagens destacadas
+                for (let i = 0; i < product.featuredImages.length; i++) {
+                    const imageObj = product.featuredImages[i];
+
+                    // Validar se "images" existe antes de usar
+                    if (imageObj && imageObj.images) {
+                        const img = document.createElement('img');
+                        img.src = imageObj.images; // Acessando a imagem de forma correta
+                        img.alt = 'Featured Image ${i + 1}';
+                        img.style.width = '100px';
+                        img.style.height = '100px';
+                        img.style.margin = '5px';
+                        featuredImagesContainer.appendChild(img);
+                    }
+                }
             } else {
-                featuredImagesContainer.textContent = 'No featured images available.';
+                console.log("No featured images available.");
             }
 
             document.getElementById('short-description').textContent = product.shortDescription || 'N/A';
