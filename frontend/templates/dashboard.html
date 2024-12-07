@@ -42,6 +42,7 @@
 
         <div id="productControls">
             <button id="resetProductsBtn">Reset Products</button>
+            <button id="sendProductBtn">Send Product</button>
             <a href="create-product.html"><button id="addProductBtn">Add Product</button></a>
             <input type="text" id="searchInput" placeholder="Search products...">
             <div id="sortSection">
@@ -114,8 +115,72 @@
             // Implementando - Gabriel
         }
 
+        async function sendProduct() {
+            const data = {
+                "productName": "Exemplo de Produto2",
+                "shortDescription": "Descrição curta do produto.",
+                "fullDescription": "Descrição completa do produto, incluindo detalhes importantes.",
+                "brand": "Marca Exemplo",
+                "category": "Categoria Exemplo",
+                "mainImage": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVBhXY+Tn5//PgASYoDQc0ECAgQEAitYBOhOAU/4AAAAASUVORK5CYII=",
+                "featuredImages": [
+                    {
+                        "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVBhXY+Tn5//PgASYoDQc0ECAgQEAitYBOhOAU/4AAAAASUVORK5CYII="
+                    },
+                    {
+                        "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVBhXY+Tn5//PgASYoDQc0ECAgQEAitYBOhOAU/4AAAAASUVORK5CYII="
+                    }
+                ],
+                "price": 199.99,
+                "discount": 19.99,
+                "enabled": true,
+                "inStock": true,
+                "dimensions": {
+                    "length": 30.0,
+                    "width": 10.0,
+                    "height": 20.0,
+                    "weight": 1.5,
+                    "unit": "cm",
+                    "unitWeight": "kg"
+                },
+                "details": [
+                    {
+                        "name": "Cor",
+                        "value": "Vermelho"
+                    },
+                    {
+                        "name": "Tamanho",
+                        "value": "M"
+                    }
+                ]
+            };
+
+            try {
+                const response = await fetch('http://localhost:8080/produtos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Success:', result);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+            fetchProducts();
+        }
+
         // Event listener para o botão de reset
         document.getElementById('resetProductsBtn').addEventListener('click', resetProductList);
+
+        // Event listener para o botão de reset
+        document.getElementById('sendProductBtn').addEventListener('click', sendProduct);
 
         // Fetch products from API
         async function fetchProducts() {
