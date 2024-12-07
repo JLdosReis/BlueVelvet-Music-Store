@@ -38,56 +38,83 @@
 
     <!-- Form for editing the product -->
     <form id="editProductForm">
-        <input type="hidden" id="productId">
-
         <input type="text" id="name" placeholder="Product Name" required>
         <textarea id="shortDescription" placeholder="Short Description" required></textarea>
         <textarea id="fullDescription" placeholder="Full Description" required></textarea>
-
         <input type="text" id="brand" placeholder="Brand" required>
         <input type="text" id="category" placeholder="Category" required>
 
-        <div>
-            <label>Choose main image:</label>
-            <input type="file" id="mainImage" accept="image/*">
-        </div>
-
-        <div id="currentMainImage">
-            <p>Current Main Image: <em id="currentMainImageName">None</em></p>
-        </div>
+        <label><input type="checkbox" id="enabled"> Enabled</label>
+        <label><input type="checkbox" id="inStock"> In Stock</label>
 
         <div>
-            <label>Choose featured images:</label>
-            <input type="file" id="featuredImages" accept="image/*" multiple>
+            <h3>Product Images</h3>
+
+            <!-- Main Image -->
+            <div>
+                <label for="mainImage">Main Image:
+                    <input type="file" id="mainImage" accept="image/*" required>
+                </label>
+                <div id="currentMainImage">
+                    <p>Current Main Image:</p>
+                    <img id="currentMainImagePreview" src="" alt="Current Main Image" style="max-width: 200px; display: none;">
+                </div>
+            </div>
+
+            <!-- Featured Images -->
+            <div>
+                <label for="featuredImages">Featured Images:
+                    <input type="file" id="featuredImages" accept="image/*" multiple>
+                </label>
+                <div id="currentFeaturedImages">
+                    <p>Current Featured Images:</p>
+                    <div id="featuredImagesPreview" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <!-- Thumbnails of featured images will be appended here -->
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div id="currentFeaturedImages">
-            <p>Current Featured Images: <em id="currentFeaturedImagesNames">None</em></p>
+        <div>
+            <h3>Product Price and Discount</h3>
+            <input type="number" id="listPrice" placeholder="Price" step="0.01" required>
+            <input type="number" id="discountPercent" placeholder="Discount" step="0.01" min="0" max="100" required>
         </div>
 
-        <input type="number" id="listPrice" placeholder="List Price" step="0.01" required>
-        <input type="number" id="discountPercent" placeholder="Discount Percent" min="0" max="100" required>
+        <div>
+            <h3>Product Dimensions</h3>
+            <div>
+                <div>
+                    <input type="number" id="length" placeholder="Length" step="0.01" required>
+                    <input type="number" id="width" placeholder="Width" step="0.01" required>
+                    <input type="number" id="height" placeholder="Height" step="0.01" required>
+                    <select id="unit">
+                        <option value="cm">cm</option>
+                        <option value="m">m</option>
+                        <option value="in">inches</option>
+                        <option value="ft">feet</option>
+                    </select>
+                </div>
 
-        <label>
-            <input type="checkbox" id="enabled"> Enabled
-        </label>
-        <label>
-            <input type="checkbox" id="inStock"> In Stock
-        </label>
-
-        <input type="number" id="length" placeholder="Length (inches)" step="0.01" required>
-        <input type="number" id="width" placeholder="Width (inches)" step="0.01" required>
-        <input type="number" id="height" placeholder="Height (inches)" step="0.01" required>
-        <input type="number" id="weight" placeholder="Weight (pounds)" step="0.01" required>
-
-        <input type="number" id="cost" placeholder="Cost" step="0.01" required>
+                <div>
+                    <input type="number" id="weight" placeholder="Weight" step="0.01" required>
+                    <select id="unitWeight">
+                        <option value="kg">kg</option>
+                        <option value="g">g</option>
+                        <option value="lb">lb</option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
         <div id="productDetails">
-            <label>Product Details:</label>
-            <button type="button" onclick="addDetail()">Add Detail</button>
+            <h3>Product Details</h3>
+            <button type="button" id="addDetailBtn">Add Detail</button>
         </div>
 
-        <button type="submit">Update Product</button>
+        <div>
+            <button type="submit">Update Product</button>
+        </div>
     </form>
     <button onclick="window.history.back()">Back to Dashboard</button>
 </div>
@@ -103,6 +130,7 @@
         });
     });
 
+    // Fetch product details and populate the form
     document.addEventListener('DOMContentLoaded', async () => {
         const apiUrl = 'http://localhost:8080/produtos';
         const urlParams = new URLSearchParams(window.location.search);
@@ -114,47 +142,80 @@
         }
 
         try {
-            // Fetch product details from the server
             const response = await fetch(`${apiUrl}/${productId}`);
             if (!response.ok) throw new Error('Error fetching product details: ' + response.statusText);
 
             const product = await response.json();
 
-            // Pre-fill the form with product details
-            document.getElementById('productId').value = product.idProduto;
-            document.getElementById('name').value = product.productName;
-            document.getElementById('shortDescription').value = product.shortDescription;
-            document.getElementById('fullDescription').value = product.fullDescription;
-            document.getElementById('brand').value = product.brand;
-            document.getElementById('category').value = product.category;
-            document.getElementById('listPrice').value = product.price;
-            document.getElementById('discountPercent').value = product.discount;
-            document.getElementById('enabled').checked = product.enabled;
-            document.getElementById('inStock').checked = product.inStock;
-            document.getElementById('length').value = product.length || '';
-            document.getElementById('width').value = product.width || '';
-            document.getElementById('height').value = product.height || '';
-            document.getElementById('weight').value = product.weight || '';
-            document.getElementById('cost').value = product.cost || '';
+            // Populate product details
+            document.getElementById('name').value = product.productName || '';
+            document.getElementById('shortDescription').value = product.shortDescription || '';
+            document.getElementById('fullDescription').value = product.fullDescription || '';
+            document.getElementById('brand').value = product.brand || '';
+            document.getElementById('category').value = product.category || '';
+            document.getElementById('enabled').checked = product.enabled || false;
+            document.getElementById('inStock').checked = product.inStock || false;
 
-            // Handle current images
-            document.getElementById('currentMainImageName').textContent = product.imageUrl || 'None';
-            document.getElementById('currentFeaturedImagesNames').textContent = product.featuredImages?.join(', ') || 'None';
+            // Populate Main Image
+            if (product.mainImage) {
+                const mainImagePreview = document.getElementById('currentMainImagePreview');
+                mainImagePreview.src = product.mainImage;
+                mainImagePreview.style.display = 'block';
+            }
 
-            // Populate existing product details
-            const productDetailsDiv = document.getElementById('productDetails');
-            product.details?.forEach(detail => {
-                const detailName = document.createElement('input');
-                detailName.value = detail.name;
-                detailName.placeholder = 'Detail Name';
-                const detailValue = document.createElement('input');
-                detailValue.value = detail.value;
-                detailValue.placeholder = 'Detail Value';
-                productDetailsDiv.appendChild(detailName);
-                productDetailsDiv.appendChild(detailValue);
-            });
+            // Populate Featured Images
+            if (Array.isArray(product.featuredImages) && product.featuredImages.length > 0) {
+                const featuredImagesPreview = document.getElementById('featuredImagesPreview');
+                featuredImagesPreview.innerHTML = ''; // Clear any existing content
+
+                product.featuredImages.forEach((imageObj, index) => {
+                    if (imageObj.image) {
+                        const img = document.createElement('img');
+                        img.src = imageObj.image; // Set Base64 image as the source
+                        img.alt = `Featured Image ${index + 1}`;
+                        img.style.maxWidth = '100px';
+                        img.style.border = '1px solid #ccc';
+                        img.style.borderRadius = '4px';
+                        img.style.margin = '5px';
+                        featuredImagesPreview.appendChild(img);
+                    } else {
+                        console.warn(`No image found for featured image at index ${index}.`, imageObj);
+                    }
+                });
+            } else {
+                console.warn('No featured images found in the product data.', product.featuredImages);
+            }
+
+            // Populate price, discount, and dimensions
+            document.getElementById('listPrice').value = product.price || '';
+            document.getElementById('discountPercent').value = product.discount || '';
+            if (product.dimensions) {
+                document.getElementById('length').value = product.dimensions.length || '';
+                document.getElementById('width').value = product.dimensions.width || '';
+                document.getElementById('height').value = product.dimensions.height || '';
+                document.getElementById('unit').value = product.dimensions.unit || 'cm';
+                document.getElementById('weight').value = product.dimensions.weight || '';
+                document.getElementById('unitWeight').value = product.dimensions.unitWeight || 'kg';
+            }
+
+            // Populate additional details
+            const detailsContainer = document.getElementById('productDetails');
+            if (product.details) {
+                product.details.forEach((detail) => {
+                    const detailRow = document.createElement('div');
+                    const detailName = document.createElement('input');
+                    detailName.value = detail.name || '';
+                    detailName.placeholder = 'Detail Name';
+                    const detailValue = document.createElement('input');
+                    detailValue.value = detail.value || '';
+                    detailValue.placeholder = 'Detail Value';
+                    detailRow.appendChild(detailName);
+                    detailRow.appendChild(detailValue);
+                    detailsContainer.appendChild(detailRow);
+                });
+            }
         } catch (error) {
-            console.error(error);
+            console.error('Error loading product details:', error);
             alert('Error loading product details. Please try again later.');
         }
     });
