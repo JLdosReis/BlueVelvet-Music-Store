@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuário</title>
+    <!-- Link para o Bootstrap 4.5.2 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+
+<body>
+<div class="container mt-5">
+    <h2>Cadastro de Usuário</h2>
+    <form id="userForm" action="/login" method="POST">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="firstName">Nome:</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" required minlength="2" maxlength="60">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="lastName">Sobrenome:</label>
+                <input type="text" class="form-control" id="lastName" name="lastName" required minlength="2" maxlength="60">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email">E-mail:</label>
+            <input type="email" class="form-control" id="email" name="email" required maxlength="128">
+        </div>
+        <div class="form-group">
+            <label for="password">Senha:</label>
+            <input type="password" class="form-control" id="password" name="password" required maxlength="64">
+        </div>
+        <div class="form-group">
+            <label for="photo">Foto (opcional):</label>
+            <input type="file" class="form-control-file" id="photo" name="photo" maxlength="80">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+
+    <div id="message"></div>
+</div>
+
+<!-- Scripts para o funcionamento do Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
