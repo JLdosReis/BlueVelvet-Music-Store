@@ -36,6 +36,12 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(produtoModel));
     }
 
+    @PostMapping("/reset")
+    public ResponseEntity<Object> productInitializer(){
+        productService.productInitializer();
+        return ResponseEntity.status(HttpStatus.OK).body("Produtos resetados com sucesso.");
+    }
+
     @GetMapping
     public ResponseEntity<Page<ProductModel>> getAllProdutos(@PageableDefault(sort = "idProduct", direction = Sort.Direction.ASC)
                                                              Pageable pageable){
