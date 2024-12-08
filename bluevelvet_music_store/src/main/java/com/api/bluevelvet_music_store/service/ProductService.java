@@ -1,4 +1,3 @@
-
 package com.api.bluevelvet_music_store.service;
 
 import com.api.bluevelvet_music_store.dtos.ProductDto;
@@ -13,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -94,5 +94,65 @@ public class ProductService {
         return productModel;
     }
 
+    @Transactional
+    public void productInitializer() {
 
+        if(productRepository.count() > 0)
+            productRepository.deleteAll();
+
+        for(int i = 0; i < 10; i++){
+            ProductModel product = new ProductModel();
+
+            product.setProductName("Exemplo de Produto " + i);
+            product.setShortDescription("Descrição curta do produto " + i + ".");
+            product.setFullDescription("Descrição completa do produto " + i +
+                    ", incluindo detalhes importantes.");
+            product.setBrand("Marca Exemplo");
+            product.setCategory("Categoria Exemplo");
+
+            String mainImageData = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVBhXY+Tn5//PgASYoDQc0ECAgQEAitYBOhOAU/4AAAAASUVORK5CYII=";
+            product.setMainImage(mainImageData);
+
+            ImageModel image1 = new ImageModel();
+            image1.setImages("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVBhXY+Tn5//PgASYoDQc0ECAgQEAitYBOhOAU/4AAAAASUVORK5CYII=");
+
+            ImageModel image2 = new ImageModel();
+            image2.setImages("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVBhXY+Tn5//PgASYoDQc0ECAgQEAitYBOhOAU/4AAAAASUVORK5CYII=");
+
+            product.getFeaturedImages().add(image1);
+            product.getFeaturedImages().add(image2);
+
+            product.setPrice(BigDecimal.valueOf(199.99));
+            product.setDiscount(BigDecimal.valueOf(19.99));
+
+            product.setEnabled(true);
+            product.setInStock(true);
+
+            DimensionsModel dimensions = new DimensionsModel();
+            dimensions.setLength(BigDecimal.valueOf(30.0));
+            dimensions.setWidth(BigDecimal.valueOf(10.0));
+            dimensions.setHeight(BigDecimal.valueOf(20.0));
+            dimensions.setWeight(BigDecimal.valueOf(1.5));
+            dimensions.setUnit("cm");
+            dimensions.setUnitWeight("kg");
+            product.setDimensions(dimensions);
+
+            DetailsModel detail1 = new DetailsModel();
+            detail1.setName("Cor");
+            detail1.setValue("Vermelho");
+
+            DetailsModel detail2 = new DetailsModel();
+            detail2.setName("Tamanho");
+            detail2.setValue("M");
+
+            product.getDetails().add(detail1);
+            product.getDetails().add(detail2);
+
+            LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+            product.setCreatedAt(now);
+            product.setUpdateAt(now);
+
+            productRepository.save(product);
+        }
+    }
 }
