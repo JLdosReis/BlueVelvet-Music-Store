@@ -42,7 +42,7 @@
 
         <div id="productControls">
             <button id="resetProductsBtn">Reset Products</button>
-            <button id="sendProductBtn">Send Product</button>
+            <button id="sendProductBtn">Send Test Product</button>
             <a href="create-product.html"><button id="addProductBtn">Add Product</button></a>
             <input type="text" id="searchInput" placeholder="Search products...">
             <div id="sortSection">
@@ -173,6 +173,7 @@
             } catch (error) {
                 console.error('Error:', error);
             }
+            fetchProducts();
         }
 
         // Event listener para o botão de reset
