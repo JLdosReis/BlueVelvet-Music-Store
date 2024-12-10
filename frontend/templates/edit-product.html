@@ -37,11 +37,12 @@
     <h2>Edit Product</h2>
 
     <!-- Form for editing the product -->
-    <div>
-        <label>Product ID:</label>
-        <span id="product-id">Loading...</span>
-    </div>
     <form id="editProductForm">
+        <div>
+            <label>Product ID:</label>
+            <span id="product-id">Loading...</span>
+        </div>
+
         <input type="text" id="productName" placeholder="Product Name" required>
         <textarea id="shortDescription" placeholder="Short Description" required></textarea>
         <textarea id="fullDescription" placeholder="Full Description" required></textarea>
@@ -57,7 +58,7 @@
             <!-- Main Image -->
             <div>
                 <label for="mainImage">Main Image:
-                    <input type="file" id="mainImage" accept="image/*" required>
+                    <input type="file" id="mainImage" accept="image/*">
                 </label>
                 <div id="currentMainImage">
                     <p>Current Main Image:</p>
@@ -112,7 +113,7 @@
         </div>
 
         <div id="detailsContainer">
-            Product Details
+            <h3>Product Details</h3>
             <button type="button" id="addDetailBtn">Add Detail</button>
             <div id="productDetails"></div>
         </div>
@@ -135,11 +136,23 @@
         });
     });
 
+    async function toBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+        });
+    }
+
     // Fetch product details and populate the form
     document.addEventListener('DOMContentLoaded', async () => {
         const apiUrl = 'http://localhost:8080/produtos';
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
+
+        const addDetailButton = document.getElementById('addDetailBtn');
+        const productDetailsContainer = document.getElementById('productDetails');
 
         if (!productId) {
             alert('Error: Product ID is missing in the URL.');
@@ -153,7 +166,7 @@
             const product = await response.json();
 
             // Populate product details
-            document.getElementById('product-id').textContent = product.idProduct;
+            document.getElementById('product-id').value = product.idProduct;
             document.getElementById('productName').value = product.productName || '';
             document.getElementById('shortDescription').value = product.shortDescription || '';
             document.getElementById('fullDescription').value = product.fullDescription || '';
@@ -251,7 +264,6 @@
             fullDescription: document.getElementById('fullDescription').value,
             brand: document.getElementById('brand').value,
             category: document.getElementById('category').value,
-            mainImage: await toBase64(document.getElementById('mainImage').files[0]),
             featuredImages: [],
             price: parseFloat(document.getElementById('price').value),
             discount: parseFloat(document.getElementById('discount').value),
@@ -267,6 +279,17 @@
             },
             details: []
         };
+
+        // Process main image
+        const mainImageInput = document.getElementById('mainImage');
+        if (mainImageInput.files.length > 0) {
+            updatedProduct.mainImage = await toBase64(mainImageInput.files[0]);
+        } else {
+            const currentMainImagePreview = document.getElementById('currentMainImagePreview');
+            if (currentMainImagePreview.src) {
+                updatedProduct.mainImage = currentMainImagePreview.src;
+            }
+        }
 
         // Process featured images
         const featuredImages = document.getElementById('featuredImages').files;
@@ -305,15 +328,6 @@
         }
     });
 
-    // function addDetail() {
-    //     const productDetailsDiv = document.getElementById('productDetails');
-    //     const detailName = document.createElement('input');
-    //     detailName.placeholder = 'Detail Name';
-    //     const detailValue = document.createElement('input');
-    //     detailValue.placeholder = 'Detail Value';
-    //     productDetailsDiv.appendChild(detailName);
-    //     productDetailsDiv.appendChild(detailValue);
-    // }
 </script>
 </div>
 <div id="footer-container"></div>
