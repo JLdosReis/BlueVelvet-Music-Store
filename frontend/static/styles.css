@@ -74,6 +74,13 @@ form {
     flex-direction: row;
     gap: 10px;
 }
+#userControls {
+    margin-top: 15px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
 
 table {
     border-collapse: collapse;
@@ -181,6 +188,12 @@ td img {
     justify-content: center;
     gap: 15px;
 }
+/* Controle de usuarios responsivo */
+#userControls {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
 
 /* Tabela responsiva */
 table {
@@ -200,6 +213,11 @@ td img {
 /* Responsividade adicional */
 @media screen and (max-width: 768px) {
     #productControls {
+        flex-direction: column; /* Alinha os controles em uma coluna */
+        align-items: center;
+    }
+
+    #userControls {
         flex-direction: column; /* Alinha os controles em uma coluna */
         align-items: center;
     }
@@ -226,6 +244,11 @@ td img {
     }
 
     #productControls {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #userControls {
         flex-direction: column;
         gap: 10px;
     }

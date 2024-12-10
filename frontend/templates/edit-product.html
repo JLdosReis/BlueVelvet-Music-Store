@@ -37,8 +37,12 @@
     <h2>Edit Product</h2>
 
     <!-- Form for editing the product -->
+    <div>
+        <label>Product ID:</label>
+        <span id="product-id">Loading...</span>
+    </div>
     <form id="editProductForm">
-        <input type="text" id="name" placeholder="Product Name" required>
+        <input type="text" id="productName" placeholder="Product Name" required>
         <textarea id="shortDescription" placeholder="Short Description" required></textarea>
         <textarea id="fullDescription" placeholder="Full Description" required></textarea>
         <input type="text" id="brand" placeholder="Brand" required>
@@ -57,7 +61,7 @@
                 </label>
                 <div id="currentMainImage">
                     <p>Current Main Image:</p>
-                    <img id="currentMainImagePreview" src="" alt="Current Main Image" style="max-width: 200px; display: none;">
+                    <img id="currentMainImagePreview" src="" alt="Current Main Image" style="width: 100px; height: 100px; display: none;">
                 </div>
             </div>
 
@@ -77,8 +81,8 @@
 
         <div>
             <h3>Product Price and Discount</h3>
-            <input type="number" id="listPrice" placeholder="Price" step="0.01" required>
-            <input type="number" id="discountPercent" placeholder="Discount" step="0.01" min="0" max="100" required>
+            <input type="number" id="price" placeholder="Price" step="0.01" required>
+            <input type="number" id="discount" placeholder="Discount" step="0.01" required>
         </div>
 
         <div>
@@ -107,13 +111,14 @@
             </div>
         </div>
 
-        <div id="productDetails">
-            <h3>Product Details</h3>
+        <div id="detailsContainer">
+            Product Details
             <button type="button" id="addDetailBtn">Add Detail</button>
+            <div id="productDetails"></div>
         </div>
 
         <div>
-            <button type="submit">Update Product</button>
+            <button type="submit" id="sendProductBtn">Edit Product</button>
         </div>
     </form>
     <button onclick="window.history.back()">Back to Dashboard</button>
@@ -148,7 +153,8 @@
             const product = await response.json();
 
             // Populate product details
-            document.getElementById('name').value = product.productName || '';
+            document.getElementById('product-id').textContent = product.idProduct;
+            document.getElementById('productName').value = product.productName || '';
             document.getElementById('shortDescription').value = product.shortDescription || '';
             document.getElementById('fullDescription').value = product.fullDescription || '';
             document.getElementById('brand').value = product.brand || '';
@@ -164,31 +170,33 @@
             }
 
             // Populate Featured Images
-            if (Array.isArray(product.featuredImages) && product.featuredImages.length > 0) {
-                const featuredImagesPreview = document.getElementById('featuredImagesPreview');
-                featuredImagesPreview.innerHTML = ''; // Clear any existing content
+            if (product.featuredImages && product.featuredImages.length > 0) {
+                const featuredImagesContainer = document.createElement('div');
+                featuredImagesContainer.id = 'featured-images';
+                document.getElementById('featuredImagesPreview').appendChild(featuredImagesContainer);
 
-                product.featuredImages.forEach((imageObj, index) => {
-                    if (imageObj.image) {
+                // Iterar sobre as imagens destacadas
+                for (let i = 0; i < product.featuredImages.length; i++) {
+                    const imageObj = product.featuredImages[i];
+
+                    // Validar se "images" existe antes de usar
+                    if (imageObj && imageObj.images) {
                         const img = document.createElement('img');
-                        img.src = imageObj.image; // Set Base64 image as the source
-                        img.alt = `Featured Image ${index + 1}`;
-                        img.style.maxWidth = '100px';
-                        img.style.border = '1px solid #ccc';
-                        img.style.borderRadius = '4px';
+                        img.src = imageObj.images; // Acessando a imagem de forma correta
+                        img.alt = 'Featured Image ${i + 1}';
+                        img.style.width = '100px';
+                        img.style.height = '100px';
                         img.style.margin = '5px';
-                        featuredImagesPreview.appendChild(img);
-                    } else {
-                        console.warn(`No image found for featured image at index ${index}.`, imageObj);
+                        featuredImagesContainer.appendChild(img);
                     }
-                });
+                }
             } else {
-                console.warn('No featured images found in the product data.', product.featuredImages);
+                console.log("No featured images available.");
             }
 
             // Populate price, discount, and dimensions
-            document.getElementById('listPrice').value = product.price || '';
-            document.getElementById('discountPercent').value = product.discount || '';
+            document.getElementById('price').value = product.price || '';
+            document.getElementById('discount').value = product.discount || '';
             if (product.dimensions) {
                 document.getElementById('length').value = product.dimensions.length || '';
                 document.getElementById('width').value = product.dimensions.width || '';
@@ -197,6 +205,17 @@
                 document.getElementById('weight').value = product.dimensions.weight || '';
                 document.getElementById('unitWeight').value = product.dimensions.unitWeight || 'kg';
             }
+
+            // Add new detail fields
+            document.getElementById('addDetailBtn').addEventListener('click', () => {
+                const container = document.getElementById('detailsContainer');
+                const div = document.createElement('div');
+                div.innerHTML = `
+                <input type="text" class="detailName" placeholder="Detail Name">
+                <input type="text" class="detailValue" placeholder="Detail Value">
+            `;
+                container.appendChild(div);
+            });
 
             // Populate additional details
             const detailsContainer = document.getElementById('productDetails');
@@ -224,27 +243,51 @@
     document.getElementById('editProductForm').addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const productId = document.getElementById('productId').value;
+        const productId = document.getElementById('product-id').value;
         const updatedProduct = {
-            idProduto: productId,
-            productName: document.getElementById('name').value,
+            idProduct: productId,
+            productName: document.getElementById('productName').value,
             shortDescription: document.getElementById('shortDescription').value,
             fullDescription: document.getElementById('fullDescription').value,
             brand: document.getElementById('brand').value,
             category: document.getElementById('category').value,
-            price: parseFloat(document.getElementById('listPrice').value),
-            discount: parseInt(document.getElementById('discountPercent').value),
+            mainImage: await toBase64(document.getElementById('mainImage').files[0]),
+            featuredImages: [],
+            price: parseFloat(document.getElementById('price').value),
+            discount: parseFloat(document.getElementById('discount').value),
             enabled: document.getElementById('enabled').checked,
             inStock: document.getElementById('inStock').checked,
             dimensions: {
                 length: parseFloat(document.getElementById('length').value),
                 width: parseFloat(document.getElementById('width').value),
                 height: parseFloat(document.getElementById('height').value),
+                weight: parseFloat(document.getElementById('weight').value),
+                unit: document.getElementById('unit').value,
+                unitWeight: document.getElementById('unitWeight').value
             },
-            weight: parseFloat(document.getElementById('weight').value),
-            cost: parseFloat(document.getElementById('cost').value),
+            details: []
         };
 
+        // Process featured images
+        const featuredImages = document.getElementById('featuredImages').files;
+        for (let i = 0; i < featuredImages.length; i++) {
+            const base64Image = await toBase64(featuredImages[i]);
+            updatedProduct.featuredImages.push({ image: base64Image });
+        }
+
+        // Collect product details
+        const detailNames = document.querySelectorAll('.detailName');
+        const detailValues = document.querySelectorAll('.detailValue');
+        for (let i = 0; i < detailNames.length; i++) {
+            if (detailNames[i].value && detailValues[i].value) {
+                updatedProduct.details.push({
+                    name: detailNames[i].value,
+                    value: detailValues[i].value
+                });
+            }
+        }
+
+        // Send the data
         try {
             const response = await fetch(`http://localhost:8080/produtos/${productId}`, {
                 method: 'PUT',
@@ -262,15 +305,15 @@
         }
     });
 
-    function addDetail() {
-        const productDetailsDiv = document.getElementById('productDetails');
-        const detailName = document.createElement('input');
-        detailName.placeholder = 'Detail Name';
-        const detailValue = document.createElement('input');
-        detailValue.placeholder = 'Detail Value';
-        productDetailsDiv.appendChild(detailName);
-        productDetailsDiv.appendChild(detailValue);
-    }
+    // function addDetail() {
+    //     const productDetailsDiv = document.getElementById('productDetails');
+    //     const detailName = document.createElement('input');
+    //     detailName.placeholder = 'Detail Name';
+    //     const detailValue = document.createElement('input');
+    //     detailValue.placeholder = 'Detail Value';
+    //     productDetailsDiv.appendChild(detailName);
+    //     productDetailsDiv.appendChild(detailValue);
+    // }
 </script>
 </div>
 <div id="footer-container"></div>

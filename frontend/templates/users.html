@@ -7,84 +7,79 @@
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
-<nav class="navbar">
-    <div class="logo">
-        <img src="images/banana.png" alt="BlueVelvet Music Store" />
-    </div>
-    <div class="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-    <ul class="nav-links">
-        <li><a href="articles.html">Articles</a></li>
-        <li><a href="brands.html">Brands</a></li>
-        <li><a href="categories.html">Categories</a></li>
-        <li><a href="customers.html">Customers</a></li>
-        <li><a href="menus.html">Menus</a></li>
-        <li><a href="orders.html">Orders</a></li>
-        <li><a href="dashboard.html">Users</a></li>
-        <li><a href="sales-report.html">Sales Report</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="shipping.html">Shipping</a></li>
-        <li><a href="users.html">Users</a></li>
-    </ul>
-</nav>
-<h1>Implementar o Users</h1>
-
-<div class="container">
-    <h1>BlueVelvet Music Store</h1>
-    <h2>User Management</h2>
-
-    <div>Welcome, Atticus (Administrator)
-        <button id="logoutBtn">Logout</button>
-    </div>
-
-    <div id="UserControls">
-        <button id="resetUserBtn">Reset Users to Initial State</button>
-        <a href="create-user.html"><button id="addUserBtn">Add User</button></a>
-        <input type="text" id="searchInput" placeholder="Search users...">
-        <div id="sortSection">
-            <select id="sortSelect">
-                <option value="userName">Sort by Name</option>
-                <option value="idUser">Sort by ID</option>
-                <option value="email">Sort by Brand</option>
-            </select>
-            <button id="toggleSortOrderBtn">ASC</button>
+<div class="main-content">
+    <nav class="navbar">
+        <div class="logo">
+            <img src="images/banana.png" alt="BlueVelvet Music Store" />
         </div>
-    </div>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="brands.html">Brands</a></li>
+            <li><a href="categories.html">Categories</a></li>
+            <li><a href="customers.html">Customers</a></li>
+            <li><a href="menus.html">Menus</a></li>
+            <li><a href="orders.html">Orders</a></li>
+            <li><a href="dashboard.html">Products</a></li>
+            <li><a href="sales-report.html">Sales Report</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="shipping.html">Shipping</a></li>
+            <li><a href="users.html">Users</a></li>
+        </ul>
+    </nav>
 
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAcElEQVQYlWO8eOz3fwY8gGlqsRk+eQbG35/M/jMwMDBcu3IUuwn37kNs0NKxxpCcWmzGwHjqsNF/fj5mBiVFRgZkk2AaGC8e+/3/519zBmRFMHDv/n+IAgYGBgaYImTw4+sxBhYYh535JMOPr5iOBACYHilKGNpf0wAAAABJRU5ErkJggg==">
+    <div class="container">
+        <h1>BlueVelvet Music Store</h1>
+        <h2>User Management</h2>
 
-    <table id="userTable">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Discount</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody id="userList">
-        <!-- Dynamic rows will be inserted here -->
-        </tbody>
-    </table>
+        <div>Welcome, Atticus (Administrator)
+            <button id="logoutBtn">Logout</button>
+        </div>
 
-    <div id="pagination">
-        <button id="firstPage">First</button>
-        <button id="prevPage">Prev</button>
-        <span id="pageIndicator"></span>
-        <button id="nextPage">Next</button>
-        <button id="lastPage">Last</button>
+        <div id="userControls">
+            <button id="resetUsersBtn">Reset Users</button>
+            <a href="create-user.html"><button id="addUserBtn">Add User</button></a>
+            <input type="text" id="searchInput" placeholder="Search users...">
+            <div id="sortSection">
+                <select id="sortSelect">
+                    <option value="userName">Sort by Name</option>
+                    <option value="idUser">Sort by ID</option>
+                    <option value="brand">Sort by Email</option>
+                </select>
+                <button id="toggleSortOrderBtn">ASC</button>
+            </div>
+        </div>
+
+        <table id="userTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="userList">
+            <!-- Dynamic rows will be inserted here -->
+            </tbody>
+        </table>
+
+        <div id="pagination">
+            <button id="firstPage">First</button>
+            <button id="prevPage">Prev</button>
+            <span id="pageIndicator"></span>
+            <button id="nextPage">Next</button>
+            <button id="lastPage">Last</button>
+        </div>
     </div>
 </div>
 
 <div id="footer-container"></div>
-
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const hamburger = document.querySelector(".hamburger");
@@ -110,11 +105,14 @@
 
         // Reset user list
         async function resetUserList() {
-            // Implementando - Gabriel
+            // Implementando
         }
 
         // Event listener para o botão de reset
         document.getElementById('resetUsersBtn').addEventListener('click', resetUserList);
+
+        // Event listener para o botão de adicionar
+        document.getElementById('sendUserBtn').addEventListener('click', sendUser);
 
         // Fetch users from API
         async function fetchUsers() {
@@ -138,7 +136,7 @@
         }
 
         // Search users
-        async function searchUser() {
+        async function searchUsers() {
             const query = searchInput.value.trim();
 
             if (!query) {
@@ -147,7 +145,7 @@
             }
 
             try {
-                const response = await fetch(`${apiUrl}/search?produto=${encodeURIComponent(query)}`);
+                const response = await fetch(`${apiUrl}/search?usuario=${encodeURIComponent(query)}`);
                 if (!response.ok) throw new Error('Error searching users: ' + response.statusText);
                 const data = await response.json();
 
@@ -155,17 +153,17 @@
                     userList.innerHTML = data.map(user => `
                         <tr>
                             <td>${user.idUser}</td>
-                            <td><img src="${user.mainImage}" alt="${user.userName}"></td>
+                            <td><img src="${user.mainImage}" alt="${user.userName}" style="width: 100px; height: 100px;"></td>
                             <td>${user.userName}</td>
-                            <td>${user.email}</td>
+                            <td>${user.userEmail}</td>
                             <td>
-                                <a href="view-user.html?id=${user.idProduto}">
+                                <a href="view-user.html?id=${user.idUser}">
                                     <button class="details-btn">View</button>
                                 </a>
-                                <a href="edit-user.html?id=${user.idProduto}">
+                                <a href="edit-user.html?id=${user.idUser}">
                                     <button class="edit-btn">Edit</button>
                                 </a>
-                                <button class="delete-btn" data-id="${user.idProduto}">Delete</button>
+                                <button class="delete-btn" data-id="${user.idUser}">Delete</button>
                             </td>
                         </tr>
                     `).join('');
@@ -207,20 +205,17 @@
             userList.innerHTML = users.map(user => `
                 <tr>
                     <td>${user.idUser}</td>
-                    <td><img src="${user.mainImage}" alt="${user.userName}"></td>
+                    <td><img src="${user.mainImage}" alt="${user.userName}" style="width: 100px; height: 100px;"></td>
                     <td>${user.userName}</td>
-                    <td>${user.brand}</td>
-                    <td>${user.category}</td>
-                    <td>${user.price}</td>
-                    <td>${user.discount}</td>
+                    <td>${user.userEmail}</td>
                     <td>
-                        <a href="view-user.html?id=${user.idProduto}">
+                        <a href="view-user.html?id=${user.idUser}">
                             <button class="details-btn">View</button>
                         </a>
-                        <a href="edit-user.html?id=${user.idProduto}">
+                        <a href="edit-user.html?id=${user.idUser}">
                             <button class="edit-btn">Edit</button>
                         </a>
-                        <button class="delete-btn" data-id="${user.idProduto}">Delete</button>
+                        <button class="delete-btn" data-id="${user.idUser}">Delete</button>
                     </td>
                 </tr>
             `).join('');
@@ -261,28 +256,13 @@
 
         fetchUsers();
     });
-
-
-
     // Carrega o conteúdo do footer.html no div com ID "footer-container"
-    document.addEventListener('DOMContentLoaded', () => {
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('footer-container').innerHTML = html;
-            })
-            .catch(error => console.error('Erro ao carregar o footer:', error));
-    });
-
-    // Show/hide navigation menu on mobile
-    document.addEventListener("DOMContentLoaded", () => {
-        const hamburger = document.querySelector(".hamburger");
-        const navLinks = document.querySelector(".nav-links");
-
-        hamburger.addEventListener("click", () => {
-            navLinks.classList.toggle("show");
-        });
-    });
+    fetch('footer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('footer-container').innerHTML = html;
+        })
+        .catch(error => console.error('Erro ao carregar o footer:', error));
 </script>
 
 </body>

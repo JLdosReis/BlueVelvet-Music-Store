@@ -60,6 +60,16 @@
         <img id="main-image" src="" alt="Product Image" style="width: 100px; height: 100px; display: none;" />
     </div>
 
+    <!-- Featured Images -->
+    <div>
+        <div id="currentFeaturedImages">
+            <p>Featured Images:</p>
+            <div id="featuredImagesPreview" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <!-- Thumbnails of featured images will be appended here -->
+            </div>
+        </div>
+    </div>
+
     <div>
         <label>Short Description:</label>
         <span id="short-description">Loading...</span>
@@ -175,14 +185,11 @@
             mainImage.style.display = 'block';
 
             // Populate featured images
-            const featuredImagesContainer = document.createElement('div');
-            featuredImagesContainer.id = 'featured-images';
-            document.getElementById('product-details').appendChild(featuredImagesContainer);
 
             if (product.featuredImages && product.featuredImages.length > 0) {
                 const featuredImagesContainer = document.createElement('div');
                 featuredImagesContainer.id = 'featured-images';
-                document.getElementById('product-details').appendChild(featuredImagesContainer);
+                document.getElementById('featuredImagesPreview').appendChild(featuredImagesContainer);
 
                 // Iterar sobre as imagens destacadas
                 for (let i = 0; i < product.featuredImages.length; i++) {
@@ -206,10 +213,14 @@
             document.getElementById('short-description').textContent = product.shortDescription || 'N/A';
             document.getElementById('full-description').textContent = product.fullDescription || 'N/A';
             document.getElementById('list-price').textContent = `$${product.price}`;
-            document.getElementById('discount').textContent = `$${product.discount} (${Math.round(((product.discount * 100) / product.price)*100)/100}% OFF)`;
+            document.getElementById('discount').textContent = `$${product.discount} (${Math.round(((product.discount * 100) / product.price) * 100) / 100}% OFF)`;
             document.getElementById('net-price').textContent = `$${product.price - product.discount}`;
             document.getElementById('enabled').textContent = product.enabled ? 'Yes' : 'No';
             document.getElementById('in-stock').textContent = product.inStock ? 'Yes' : 'No';
+
+
+            document.getElementById('creation-time').textContent = product.createdAt || 'N/A';
+            document.getElementById('update-time').textContent = product.updateAt || 'N/A';
 
             // Dimensions
             document.getElementById('length').textContent = `${product.dimensions.length || 'N/A'} ${product.dimensions.unit || ''}`;
