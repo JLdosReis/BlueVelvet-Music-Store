@@ -89,7 +89,7 @@
             navLinks.classList.toggle("show");
         });
 
-        const apiUrl = 'http://localhost:8080/usuarios';
+        const apiUrl = 'http://localhost:8080/usuario';
         const userList = document.getElementById('userList');
         const searchInput = document.getElementById('searchInput');
         const sortSelect = document.getElementById('sortSelect');
@@ -154,7 +154,7 @@
                         <tr>
                             <td>${user.userId}</td>
                             <td><img src="${user.userPhoto}" alt="${user.name}" style="width: 100px; height: 100px;"></td>
-                            <td>${user.name}</td>
+                            <td>${user.name} ${user.surname}</td>
                             <td>${user.email}</td>
                             <td>
                                 <a href="view-user.html?id=${user.userId}">
@@ -206,7 +206,7 @@
                 <tr>
                     <td>${user.userId}</td>
                     <td><img src="${user.userPhoto}" alt="${user.name}" style="width: 100px; height: 100px;"></td>
-                    <td>${user.name}</td>
+                    <td>${user.name} ${user.surname}</td>
                     <td>${user.email}</td>
                     <td>
                         <a href="view-user.html?id=${user.userId}">
