@@ -7,6 +7,8 @@ import com.api.bluevelvet_music_store.exceptions.InvalidCredentialsException;
 import com.api.bluevelvet_music_store.exceptions.UserNotFoundException;
 import com.api.bluevelvet_music_store.models.UserModel;
 import com.api.bluevelvet_music_store.security.UserDetailsServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -51,11 +56,22 @@ public class UserController {
         try {
             var userAuth = new UsernamePasswordAuthenticationToken(userLoginDto.email(),
                     userLoginDto.password());
-            authenticationManager.authenticate(userAuth);
+            Authentication authentication = authenticationManager.authenticate(userAuth);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             return ResponseEntity.ok("Sucesso!");
         } catch (Exception e){
             throw new InvalidCredentialsException();
         }
+    }
+
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GERENTE_VENDAS', 'EDITOR', 'ASSISTENTE', 'GERENTE_ENTREGAS','USUARIO')")
+    @PostMapping("/logout")
+    public ResponseEntity<String> userLogout(HttpServletRequest request, HttpServletResponse response) {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return ResponseEntity.ok("Logout realizado com sucesso!");
     }
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GERENTE_VENDAS', 'ASSISTENTE')")
@@ -77,7 +93,7 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GERENTE_VENDAS')")
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") Long id,
+    public ResponseEntity<Object> updateUser(@PathVariable(value = "id") Long id,
                                                 @RequestBody @Valid UserDto userDto){
         Optional<UserModel> userModelOpt = userDetailsService.findById(id);
         if(userModelOpt.isEmpty()){
@@ -91,7 +107,7 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GERENTE_VENDAS')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteProduct(@PathVariable(value = "id") Long id){
+    public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") Long id){
         Optional<UserModel> userModelOpt = userDetailsService.findById(id);
         if(userModelOpt.isEmpty()){
             throw new UserNotFoundException(id);

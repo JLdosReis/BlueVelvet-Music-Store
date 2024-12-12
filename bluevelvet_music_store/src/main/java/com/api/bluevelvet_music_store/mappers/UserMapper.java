@@ -6,6 +6,7 @@ import com.api.bluevelvet_music_store.models.UserModel;
 import com.api.bluevelvet_music_store.models.RoleModel;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,7 +17,9 @@ public class UserMapper {
 
     public UserModel toModel(UserDto userDto) {
         UserModel userModel = new UserModel();
-        BeanUtils.copyProperties(userDto, userModel, "userPhoto","roles");
+        BeanUtils.copyProperties(userDto, userModel, "password",
+                "userPhoto","roles");
+        userModel.setPassword(new BCryptPasswordEncoder().encode(userDto.password()));
         userModel.setUserPhoto(userDto.userPhoto());
         userModel.setRoles(mapRoles(userDto.roles()));
         return userModel;
