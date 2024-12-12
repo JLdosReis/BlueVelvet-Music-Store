@@ -112,7 +112,30 @@
 
         // Reset product list
         async function resetProductList() {
-            // Implementando - Gabriel
+            const resetUrl = 'http://localhost:8080/reset'; // URL do endpoint de reset
+
+            try {
+                const response = await fetch(resetUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao resetar produtos: ${response.statusText}');
+                }
+
+                const result = await response.text(); // Pode ser JSON ou texto simples
+                console.log('Success:', result);
+
+                // Após o reset, recarregue a lista de produtos
+                fetchProducts(); // Chama a função que busca os produtos atualizados
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Falha ao resetar produtos: ${error.message}');
+            }
         }
 
         async function sendProduct() {
