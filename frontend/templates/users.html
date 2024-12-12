@@ -46,8 +46,8 @@
             <input type="text" id="searchInput" placeholder="Search users...">
             <div id="sortSection">
                 <select id="sortSelect">
-                    <option value="userName">Sort by Name</option>
-                    <option value="idUser">Sort by ID</option>
+                    <option value="name">Sort by Name</option>
+                    <option value="userId">Sort by ID</option>
                     <option value="brand">Sort by Email</option>
                 </select>
                 <button id="toggleSortOrderBtn">ASC</button>
@@ -152,18 +152,18 @@
                 if (data.length > 0) {
                     userList.innerHTML = data.map(user => `
                         <tr>
-                            <td>${user.idUser}</td>
-                            <td><img src="${user.mainImage}" alt="${user.userName}" style="width: 100px; height: 100px;"></td>
-                            <td>${user.userName}</td>
-                            <td>${user.userEmail}</td>
+                            <td>${user.userId}</td>
+                            <td><img src="${user.userPhoto}" alt="${user.name}" style="width: 100px; height: 100px;"></td>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
                             <td>
-                                <a href="view-user.html?id=${user.idUser}">
+                                <a href="view-user.html?id=${user.userId}">
                                     <button class="details-btn">View</button>
                                 </a>
-                                <a href="edit-user.html?id=${user.idUser}">
+                                <a href="edit-user.html?id=${user.userId}">
                                     <button class="edit-btn">Edit</button>
                                 </a>
-                                <button class="delete-btn" data-id="${user.idUser}">Delete</button>
+                                <button class="delete-btn" data-id="${user.userId}">Delete</button>
                             </td>
                         </tr>
                     `).join('');
@@ -204,15 +204,15 @@
         function displayUsers() {
             userList.innerHTML = users.map(user => `
                 <tr>
-                    <td>${user.idUser}</td>
-                    <td><img src="${user.mainImage}" alt="${user.userName}" style="width: 100px; height: 100px;"></td>
-                    <td>${user.userName}</td>
-                    <td>${user.userEmail}</td>
+                    <td>${user.userId}</td>
+                    <td><img src="${user.userPhoto}" alt="${user.name}" style="width: 100px; height: 100px;"></td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
                     <td>
-                        <a href="view-user.html?id=${user.idUser}">
+                        <a href="view-user.html?id=${user.userId}">
                             <button class="details-btn">View</button>
                         </a>
-                        <a href="edit-user.html?id=${user.idUser}">
+                        <a href="edit-user.html?id=${user.userId}">
                             <button class="edit-btn">Edit</button>
                         </a>
                         <button class="delete-btn" data-id="${user.idUser}">Delete</button>
