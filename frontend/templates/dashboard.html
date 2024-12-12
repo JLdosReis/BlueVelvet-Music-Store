@@ -99,7 +99,7 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Erro ao resetar produtos: ${response.statusText}');
+                    throw new Error(`Erro ao resetar produtos: ${response.statusText}`);
                 }
 
                 const result = await response.text(); // Pode ser JSON ou texto simples
@@ -110,7 +110,7 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                alert('Falha ao resetar produtos: ${error.message}');
+                alert(`Falha ao resetar produtos: ${error.message}`);
             }
         }
 
