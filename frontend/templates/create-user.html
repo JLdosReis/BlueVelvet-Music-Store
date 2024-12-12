@@ -71,6 +71,7 @@
 
 <script>
     document.getElementById('createUserForm').addEventListener('submit', async function (event) {
+        const apiUrl = 'http://localhost:8080/usuario';
         event.preventDefault(); // Prevent default form submission
 
         const form = event.target;
@@ -93,7 +94,7 @@
         }
 
         try {
-            const response = await fetch('/usuario/registro', { // Atualize a URL aqui, se necessário
+            const response = await fetch(`${apiUrl}/registro`, { // Atualize a URL aqui, se necessário
                 method: 'POST',
                 body: formData
             });
