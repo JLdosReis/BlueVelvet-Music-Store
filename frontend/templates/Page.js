@@ -14,4 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('navbar-container').innerHTML = html;
     })
         .catch(error => console.error('Erro ao carregar a barra de navegação:', error));
+
+    // Show/hide navigation on mobile
+    document.addEventListener("DOMContentLoaded", () => {
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+
+        hamburger.addEventListener("click", () => {
+            navLinks.classList.toggle("show");
+        });
+    });
 });

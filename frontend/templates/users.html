@@ -64,12 +64,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const hamburger = document.querySelector(".hamburger");
-        const navLinks = document.querySelector(".nav-links");
-
-        hamburger.addEventListener("click", () => {
-            navLinks.classList.toggle("show");
-        });
 
         const apiUrl = 'http://localhost:8080/usuario';
         const userList = document.getElementById('userList');
