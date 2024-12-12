@@ -8,76 +8,62 @@
 </head>
 <body>
 <div class="main-content">
-    <nav class="navbar">
-        <div class="logo">
-            <img src="images/banana.png" alt="BlueVelvet Music Store" />
-        </div>
-        <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="articles.html">Articles</a></li>
-            <li><a href="brands.html">Brands</a></li>
-            <li><a href="categories.html">Categories</a></li>
-            <li><a href="customers.html">Customers</a></li>
-            <li><a href="menus.html">Menus</a></li>
-            <li><a href="orders.html">Orders</a></li>
-            <li><a href="dashboard.html">Products</a></li>
-            <li><a href="sales-report.html">Sales Report</a></li>
-            <li><a href="settings.html">Settings</a></li>
-            <li><a href="shipping.html">Shipping</a></li>
-            <li><a href="users.html">Users</a></li>
-        </ul>
-    </nav>
-<div class="container mt-5">
-    <h2>Create User</h2>
-    <form id="createUserForm">
-        <!-- Email -->
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <!-- Name -->
-        <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
-        </div>
-        <!-- Surname -->
-        <div class="mb-3">
-            <label for="surname" class="form-label">Surname</label>
-            <input type="text" class="form-control" id="surname" name="surname" required>
-        </div>
-        <!-- Password -->
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <!-- User Photo -->
-        <div class="mb-3">
-            <label for="userPhoto" class="form-label">User Photo</label>
-            <input type="file" class="form-control" id="userPhoto" name="userPhoto" accept="image/*">
-        </div>
-        <!-- Enable -->
-        <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="enable" name="enable" value="true">
-            <label class="form-check-label" for="enable">Enable</label>
-        </div>
-        <!-- Roles -->
-        <div class="mb-3">
-            <label for="roles" class="form-label">Roles</label>
-            <select class="form-select" id="roles" name="roles" multiple>
-                <option value="ROLE_USER">User</option>
-                <option value="ROLE_ADMIN">Admin</option>
-                <option value="ROLE_MODERATOR">Moderator</option>
-            </select>
-            <small class="text-muted">Hold CTRL or CMD to select multiple roles.</small>
-        </div>
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary">Create User</button>
-    </form>
+    <div id="navbar-container"></div>
+
+    <div class="container mt-5">
+        <h2>Create User</h2>
+        <form id="createUserForm">
+            <!-- Email -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <!-- Name -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <!-- Surname -->
+            <div class="mb-3">
+                <label for="surname" class="form-label">Surname</label>
+                <input type="text" class="form-control" id="surname" name="surname" required>
+            </div>
+            <!-- Password -->
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <!-- User Photo -->
+            <div class="mb-3">
+                <label for="userPhoto" class="form-label">User Photo</label>
+                <input type="file" class="form-control" id="userPhoto" name="userPhoto" accept="image/*">
+            </div>
+            <!-- Enable -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="enable" name="enable" value="true">
+                <label class="form-check-label" for="enable">Enable</label>
+            </div>
+            <!-- Roles -->
+            <div class="mb-3">
+                <label for="roles" class="form-label">Roles</label>
+                <select class="form-select" id="roles" name="roles" multiple>
+                    <option value="ROLE_USER">User</option>
+                    <option value="ROLE_ADMIN">Admin</option>
+                    <option value="ROLE_MODERATOR">Moderator</option>
+                </select>
+                <small class="text-muted">Hold CTRL or CMD to select multiple roles.</small>
+            </div>
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Create User</button>
+        </form>
+    </div>
 </div>
+
+
+<div id="footer-container"></div>
+</body>
+</html>
+
 
 <script>
     document.getElementById('createUserForm').addEventListener('submit', async function (event) {
@@ -123,5 +109,4 @@
     }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<script src="Page.js"></script>

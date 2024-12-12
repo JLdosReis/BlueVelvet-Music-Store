@@ -8,122 +8,105 @@
 </head>
 <body>
 <div class="main-content">
-<nav class="navbar">
-    <div class="logo">
-        <img src="images/banana.png" alt="BlueVelvet Music Store" />
-    </div>
-    <div class="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-    <ul class="nav-links">
-        <li><a href="articles.html">Articles</a></li>
-        <li><a href="brands.html">Brands</a></li>
-        <li><a href="categories.html">Categories</a></li>
-        <li><a href="customers.html">Customers</a></li>
-        <li><a href="menus.html">Menus</a></li>
-        <li><a href="orders.html">Orders</a></li>
-        <li><a href="dashboard.html">Products</a></li>
-        <li><a href="sales-report.html">Sales Report</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="shipping.html">Shipping</a></li>
-        <li><a href="users.html">Users</a></li>
-    </ul>
-</nav>
+    <div id="navbar-container"></div>
 
-<div class="container">
-    <h1>BlueVelvet Music Store</h1>
-    <h2>Edit Product</h2>
+    <div class="container">
+        <h1>BlueVelvet Music Store</h1>
+        <h2>Edit Product</h2>
 
-    <!-- Form for editing the product -->
-    <form id="editProductForm">
-        <div>
-            <label>Product ID:</label>
-            <span id="product-id">Loading...</span>
-        </div>
-
-        <input type="text" id="productName" placeholder="Product Name" required>
-        <textarea id="shortDescription" placeholder="Short Description" required></textarea>
-        <textarea id="fullDescription" placeholder="Full Description" required></textarea>
-        <input type="text" id="brand" placeholder="Brand" required>
-        <input type="text" id="category" placeholder="Category" required>
-
-        <label><input type="checkbox" id="enabled"> Enabled</label>
-        <label><input type="checkbox" id="inStock"> In Stock</label>
-
-        <div>
-            <h3>Product Images</h3>
-
-            <!-- Main Image -->
+        <!-- Form for editing the product -->
+        <form id="editProductForm">
             <div>
-                <label for="mainImage">Main Image:
-                    <input type="file" id="mainImage" accept="image/*">
-                </label>
-                <div id="currentMainImage">
-                    <p>Current Main Image:</p>
-                    <img id="currentMainImagePreview" src="" alt="Current Main Image" style="width: 100px; height: 100px; display: none;">
-                </div>
+                <label>Product ID:</label>
+                <span id="product-id">Loading...</span>
             </div>
 
-            <!-- Featured Images -->
+            <input type="text" id="productName" placeholder="Product Name" required>
+            <textarea id="shortDescription" placeholder="Short Description" required></textarea>
+            <textarea id="fullDescription" placeholder="Full Description" required></textarea>
+            <input type="text" id="brand" placeholder="Brand" required>
+            <input type="text" id="category" placeholder="Category" required>
+
+            <label><input type="checkbox" id="enabled"> Enabled</label>
+            <label><input type="checkbox" id="inStock"> In Stock</label>
+
             <div>
-                <label for="featuredImages">Featured Images:
-                    <input type="file" id="featuredImages" accept="image/*" multiple>
-                </label>
-                <div id="currentFeaturedImages">
-                    <p>Current Featured Images:</p>
-                    <div id="featuredImagesPreview" style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <!-- Thumbnails of featured images will be appended here -->
+                <h3>Product Images</h3>
+
+                <!-- Main Image -->
+                <div>
+                    <label for="mainImage">Main Image:
+                        <input type="file" id="mainImage" accept="image/*">
+                    </label>
+                    <div id="currentMainImage">
+                        <p>Current Main Image:</p>
+                        <img id="currentMainImagePreview" src="" alt="Current Main Image" style="width: 100px; height: 100px; display: none;">
+                    </div>
+                </div>
+
+                <!-- Featured Images -->
+                <div>
+                    <label for="featuredImages">Featured Images:
+                        <input type="file" id="featuredImages" accept="image/*" multiple>
+                    </label>
+                    <div id="currentFeaturedImages">
+                        <p>Current Featured Images:</p>
+                        <div id="featuredImagesPreview" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <!-- Thumbnails of featured images will be appended here -->
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div>
-            <h3>Product Price and Discount</h3>
-            <input type="number" id="price" placeholder="Price" step="0.01" required>
-            <input type="number" id="discount" placeholder="Discount" step="0.01" required>
-        </div>
-
-        <div>
-            <h3>Product Dimensions</h3>
             <div>
-                <div>
-                    <input type="number" id="length" placeholder="Length" step="0.01" required>
-                    <input type="number" id="width" placeholder="Width" step="0.01" required>
-                    <input type="number" id="height" placeholder="Height" step="0.01" required>
-                    <select id="unit">
-                        <option value="cm">cm</option>
-                        <option value="m">m</option>
-                        <option value="in">inches</option>
-                        <option value="ft">feet</option>
-                    </select>
-                </div>
+                <h3>Product Price and Discount</h3>
+                <input type="number" id="price" placeholder="Price" step="0.01" required>
+                <input type="number" id="discount" placeholder="Discount" step="0.01" required>
+            </div>
 
+            <div>
+                <h3>Product Dimensions</h3>
                 <div>
-                    <input type="number" id="weight" placeholder="Weight" step="0.01" required>
-                    <select id="unitWeight">
-                        <option value="kg">kg</option>
-                        <option value="g">g</option>
-                        <option value="lb">lb</option>
-                    </select>
+                    <div>
+                        <input type="number" id="length" placeholder="Length" step="0.01" required>
+                        <input type="number" id="width" placeholder="Width" step="0.01" required>
+                        <input type="number" id="height" placeholder="Height" step="0.01" required>
+                        <select id="unit">
+                            <option value="cm">cm</option>
+                            <option value="m">m</option>
+                            <option value="in">inches</option>
+                            <option value="ft">feet</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <input type="number" id="weight" placeholder="Weight" step="0.01" required>
+                        <select id="unitWeight">
+                            <option value="kg">kg</option>
+                            <option value="g">g</option>
+                            <option value="lb">lb</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="detailsContainer">
-            <h3>Product Details</h3>
-            <button type="button" id="addDetailBtn">Add Detail</button>
-            <div id="productDetails"></div>
-        </div>
+            <div id="detailsContainer">
+                <h3>Product Details</h3>
+                <button type="button" id="addDetailBtn">Add Detail</button>
+                <div id="productDetails"></div>
+            </div>
 
-        <div>
-            <button type="submit" id="sendProductBtn">Edit Product</button>
-        </div>
-    </form>
-    <button onclick="location.href = 'dashboard.html'">Back to Dashboard</button>
+            <div>
+                <button type="submit" id="sendProductBtn">Edit Product</button>
+            </div>
+        </form>
+        <button onclick="location.href = 'dashboard.html'">Back to Dashboard</button>
+    </div>
 </div>
+<div id="footer-container"></div>
+
+</body>
+</html>
 
 <script>
     // Show/hide navigation menu on mobile
@@ -329,18 +312,5 @@
     });
 
 </script>
-</div>
-<div id="footer-container"></div>
-<script>
-    // Carrega o conteúdo do footer.html no div com ID "footer-container"
-    document.addEventListener('DOMContentLoaded', () => {
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('footer-container').innerHTML = html;
-            })
-            .catch(error => console.error('Erro ao carregar o footer:', error));
-    });
-</script>
-</body>
-</html>
+
+<script src="Page.js"></script>

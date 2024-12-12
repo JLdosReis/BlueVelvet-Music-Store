@@ -8,140 +8,124 @@
 </head>
 <body>
 <div class="main-content">
-<nav class="navbar">
-    <div class="logo">
-        <img src="images/banana.png" alt="BlueVelvet Music Store" />
-    </div>
-    <div class="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-    <ul class="nav-links">
-        <li><a href="articles.html">Articles</a></li>
-        <li><a href="brands.html">Brands</a></li>
-        <li><a href="categories.html">Categories</a></li>
-        <li><a href="customers.html">Customers</a></li>
-        <li><a href="menus.html">Menus</a></li>
-        <li><a href="orders.html">Orders</a></li>
-        <li><a href="dashboard.html">Products</a></li>
-        <li><a href="sales-report.html">Sales Report</a></li>
-        <li><a href="settings.html">Settings</a></li>
-        <li><a href="shipping.html">Shipping</a></li>
-        <li><a href="users.html">Users</a></li>
-    </ul>
-</nav>
-<div class="container">
-<h1>Product Details</h1>
+    <div id="navbar-container"></div>
+    <div class="container">
+        <h1>Product Details</h1>
 
-<div id="product-details" class="container">
-    <div>
-        <label>Product ID:</label>
-        <span id="product-id">Loading...</span>
-    </div>
+        <div id="product-details" class="container">
+            <div>
+                <label>Product ID:</label>
+                <span id="product-id">Loading...</span>
+            </div>
 
-    <div>
-        <label>Product Name:</label>
-        <span id="product-name">Loading...</span>
-    </div>
+            <div>
+                <label>Product Name:</label>
+                <span id="product-name">Loading...</span>
+            </div>
 
-    <div>
-        <label>Category:</label>
-        <span id="category">Loading...</span>
-    </div>
+            <div>
+                <label>Category:</label>
+                <span id="category">Loading...</span>
+            </div>
 
-    <div>
-        <label>Brand:</label>
-        <span id="brand">Loading...</span>
-    </div>
+            <div>
+                <label>Brand:</label>
+                <span id="brand">Loading...</span>
+            </div>
 
-    <div>
-        <label>Main Image:</label>
-        <img id="main-image" src="" alt="Product Image" style="width: 100px; height: 100px; display: none;" />
-    </div>
+            <div>
+                <label>Main Image:</label>
+                <img id="main-image" src="" alt="Product Image" style="width: 100px; height: 100px; display: none;" />
+            </div>
 
-    <!-- Featured Images -->
-    <div>
-        <div id="currentFeaturedImages">
-            <p>Featured Images:</p>
-            <div id="featuredImagesPreview" style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <!-- Thumbnails of featured images will be appended here -->
+            <!-- Featured Images -->
+            <div>
+                <div id="currentFeaturedImages">
+                    <p>Featured Images:</p>
+                    <div id="featuredImagesPreview" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <!-- Thumbnails of featured images will be appended here -->
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label>Short Description:</label>
+                <span id="short-description">Loading...</span>
+            </div>
+
+            <div>
+                <label>Full Description:</label>
+                <p id="full-description">Loading...</p>
+            </div>
+
+            <div>
+                <label>List Price:</label>
+                <span id="list-price">Loading...</span>
+            </div>
+
+            <div>
+                <label>Discount:</label>
+                <span id="discount">Loading...</span>
+            </div>
+
+            <div>
+                <label>Net Price:</label>
+                <span id="net-price">Loading...</span>
+            </div>
+
+            <div>
+                <label>Enabled:</label>
+                <span id="enabled">Loading...</span>
+            </div>
+
+            <div>
+                <label>In Stock:</label>
+                <span id="in-stock">Loading...</span>
+            </div>
+
+            <div>
+                <label>Creation Time:</label>
+                <span id="creation-time">Loading...</span>
+            </div>
+
+            <div>
+                <label>Update Time:</label>
+                <span id="update-time">Loading...</span>
+            </div>
+
+            <div>
+                <label>Length:</label>
+                <span id="length">Loading...</span>
+            </div>
+            <div>
+                <label>Width:</label>
+                <span id="width">Loading...</span>
+            </div>
+            <div>
+                <label>Height:</label>
+                <span id="height">Loading...</span>
+            </div>
+            <div>
+                <label>Weight:</label>
+                <span id="weight">Loading...</span>
+            </div>
+
+            <div>
+                <label>Product Details:</label>
+                <ul id="product-details-list">
+                    <!-- Dynamic product details list -->
+                </ul>
             </div>
         </div>
-    </div>
 
-    <div>
-        <label>Short Description:</label>
-        <span id="short-description">Loading...</span>
-    </div>
-
-    <div>
-        <label>Full Description:</label>
-        <p id="full-description">Loading...</p>
-    </div>
-
-    <div>
-        <label>List Price:</label>
-        <span id="list-price">Loading...</span>
-    </div>
-
-    <div>
-        <label>Discount:</label>
-        <span id="discount">Loading...</span>
-    </div>
-
-    <div>
-        <label>Net Price:</label>
-        <span id="net-price">Loading...</span>
-    </div>
-
-    <div>
-        <label>Enabled:</label>
-        <span id="enabled">Loading...</span>
-    </div>
-
-    <div>
-        <label>In Stock:</label>
-        <span id="in-stock">Loading...</span>
-    </div>
-
-    <div>
-        <label>Creation Time:</label>
-        <span id="creation-time">Loading...</span>
-    </div>
-
-    <div>
-        <label>Update Time:</label>
-        <span id="update-time">Loading...</span>
-    </div>
-
-    <div>
-        <label>Length:</label>
-        <span id="length">Loading...</span>
-    </div>
-    <div>
-        <label>Width:</label>
-        <span id="width">Loading...</span>
-    </div>
-    <div>
-        <label>Height:</label>
-        <span id="height">Loading...</span>
-    </div>
-    <div>
-        <label>Weight:</label>
-        <span id="weight">Loading...</span>
-    </div>
-
-    <div>
-        <label>Product Details:</label>
-        <ul id="product-details-list">
-            <!-- Dynamic product details list -->
-        </ul>
+        <button onclick="location.href = 'dashboard.html'">Back to Dashboard</button>
     </div>
 </div>
 
-    <button onclick="location.href = 'dashboard.html'">Back to Dashboard</button>
-</div>
+<div id="footer-container"></div>
+
+</body>
+</html>
 
 <script>
     // Show/hide navigation menu on mobile
@@ -244,21 +228,5 @@
             alert('Error loading product details. Please try again later.');
         }
     });
-
-
 </script>
-</div>
-<div id="footer-container"></div>
-<script>
-    // Carrega o conteúdo do footer.html no div com ID "footer-container"
-    document.addEventListener('DOMContentLoaded', () => {
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('footer-container').innerHTML = html;
-            })
-            .catch(error => console.error('Erro ao carregar o footer:', error));
-    });
-</script>
-</body>
-</html>
+<script src="Page.js"></script>
