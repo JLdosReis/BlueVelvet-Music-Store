@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User - BlueVelvet Music Store</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+<div class="main-content">
+    <nav class="navbar">
+        <div class="logo">
+            <img src="images/banana.png" alt="BlueVelvet Music Store" />
+        </div>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="brands.html">Brands</a></li>
+            <li><a href="categories.html">Categories</a></li>
+            <li><a href="customers.html">Customers</a></li>
+            <li><a href="menus.html">Menus</a></li>
+            <li><a href="orders.html">Orders</a></li>
+            <li><a href="dashboard.html">Products</a></li>
+            <li><a href="sales-report.html">Sales Report</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="shipping.html">Shipping</a></li>
+            <li><a href="users.html">Users</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>BlueVelvet Music Store</h1>
+        <h2>Edit User</h2>
+
+        <!-- Form for editing the user -->
+        <form id="editUserForm">
+            <div>
+                <label>User ID:</label>
+                <span id="user-id">Loading...</span>
+            </div>
+
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="text" id="surname" placeholder="Surname" required>
+
+            <input type="email" id="email" placeholder="Email" required>
+
+            <input type="email" id="password" placeholder="Password" required>
+
+            <label><input type="checkbox" id="enable"> Enabled</label>
+
+            <!-- User Photo -->
+            <div>
+                <label for="userPhoto">User Photo:
+                    <input type="file" id="userPhoto" accept="image/*">
+                </label>
+                <div id="currentUserPhoto">
+                    <p>Current User Photo:</p>
+                    <img id="currentUserPhotoPreview" src="" alt="Current User Photo" style="width: 100px; height: 100px; display: none;">
+                    <label>File type:</label>
+                    <span id="contentType">Loading...</span>
+                </div>
+            </div>
+
+            <div>
+                <p>Roles:</p>
+                <div id="roles"></div>
+            </div>
+
+            <div>
+                <button type="submit" id="saveUserBtn">Edit User</button>
+            </div>
+        </form>
+        <button onclick="location.href = 'users.html'">Back to Users</button>
+    </div>
+
+    <script>
+        // Show/hide navigation menu on mobile
+        document.addEventListener("DOMContentLoaded", () => {
+            const hamburger = document.querySelector(".hamburger");
+            const navLinks = document.querySelector(".nav-links");
+
+            hamburger.addEventListener("click", () => {
+                navLinks.classList.toggle("show");
+            });
+        });
+
+        // Fetch user details and populate the form
+        document.addEventListener('DOMContentLoaded', async () => {
+            const apiUrl = 'http://localhost:8080/usuario';
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('id');
+
+            if (!userId) {
+                alert('Error: User ID is missing in the URL.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiUrl}/${userId}`);
+                if (!response.ok) throw new Error('Error fetching user details: ' + response.statusText);
+
+                const user = await response.json();
+
+                // Populate user details
+                document.getElementById('user-id').textContent = user.userId || '';
+                document.getElementById('name').value = user.name || '';
+                document.getElementById('surname').value = user.surname || '';
+                document.getElementById('email').value = user.email || '';
+                document.getElementById('password').value = user.password || '';
+                document.getElementById('enable').checked = user.enable || false;
+
+                document.getElementById('contentType').value = user.contentType || '';
+
+                // Populate Main Image
+                if (user.userPhoto) {
+                    const userPhotoPreview = document.getElementById('currentUserPhotoPreview');
+                    userPhotoPreview.src = user.userPhoto;
+                    userPhotoPreview.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Error loading user details:', error);
+                alert('Error loading user details. Please try again later.');
+            }
+        });
+
+        // Handle form submission to update the user
+        document.getElementById('editUserForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const userId = document.getElementById('user-id').textContent;
+            const updatedUser = {
+                idUser: userId,
+                name: document.getElementById('userName').value,
+                surname: document.getElementById('userName').value,
+                email: document.getElementById('userEmail').value,
+                password: document.getElementById('password').value,
+                enable: document.getElementById('enable').checked,
+                contentType: document.getElementById('contentType').value,
+            };
+
+            // Process main image
+            const userPhotoInput = document.getElementById('userPhoto');
+            if (userPhotoInput.files.length > 0) {
+                updatedUser.userPhoto = await toBase64(userPhotoInput.files[0]);
+                updatedUser.contentType = userPhotoInput.files[0].type;
+            } else {
+                const currentUserPhotoPreview = document.getElementById('currentUserPhotoPreview');
+                if (currentUserPhotoPreview.src) {
+                    updatedUser.userPhoto = currentUserPhotoPreview.src;
+                }
+            }
+
+            try {
+                const response = await fetch(`http://localhost:8080/usuarios/${userId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedUser),
+                });
+
+                if (!response.ok) throw new Error('Error updating user: ' + response.statusText);
+
+                alert('User updated successfully!');
+                window.location.href = 'users.html';
+            } catch (error) {
+                console.error(error);
+                alert('Error updating user. Please try again later.');
+            }
+        });
+    </script>
+</div>
+<div id="footer-container"></div>
+<script>
+    // Load the footer content
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer-container').innerHTML = html;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+    });
+</script>
+</body>
+</html>

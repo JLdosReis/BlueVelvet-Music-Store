@@ -1,52 +1,127 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Usuário</title>
-    <!-- Link para o Bootstrap 4.5.2 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
-
+    <title>Add User - BlueVelvet Music Store</title>
+    <link rel="stylesheet" href="../static/styles.css">
 </head>
-
 <body>
+<div class="main-content">
+    <nav class="navbar">
+        <div class="logo">
+            <img src="images/banana.png" alt="BlueVelvet Music Store" />
+        </div>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="brands.html">Brands</a></li>
+            <li><a href="categories.html">Categories</a></li>
+            <li><a href="customers.html">Customers</a></li>
+            <li><a href="menus.html">Menus</a></li>
+            <li><a href="orders.html">Orders</a></li>
+            <li><a href="dashboard.html">Products</a></li>
+            <li><a href="sales-report.html">Sales Report</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="shipping.html">Shipping</a></li>
+            <li><a href="users.html">Users</a></li>
+        </ul>
+    </nav>
 <div class="container mt-5">
-    <h2>Cadastro de Usuário</h2>
-    <form id="userForm" action="/login" method="POST">
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="firstName">Nome:</label>
-                <input type="text" class="form-control" id="firstName" name="firstName" required minlength="2" maxlength="60">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="lastName">Sobrenome:</label>
-                <input type="text" class="form-control" id="lastName" name="lastName" required minlength="2" maxlength="60">
-            </div>
+    <h2>Create User</h2>
+    <form id="createUserForm">
+        <!-- Email -->
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
         </div>
-        <div class="form-group">
-            <label for="email">E-mail:</label>
-            <input type="email" class="form-control" id="email" name="email" required maxlength="128">
+        <!-- Name -->
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
         </div>
-        <div class="form-group">
-            <label for="password">Senha:</label>
-            <input type="password" class="form-control" id="password" name="password" required maxlength="64">
+        <!-- Surname -->
+        <div class="mb-3">
+            <label for="surname" class="form-label">Surname</label>
+            <input type="text" class="form-control" id="surname" name="surname" required>
         </div>
-        <div class="form-group">
-            <label for="photo">Foto (opcional):</label>
-            <input type="file" class="form-control-file" id="photo" name="photo" maxlength="80">
+        <!-- Password -->
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
         </div>
-
-        <button type="submit" class="btn btn-primary">Registrar</button>
+        <!-- User Photo -->
+        <div class="mb-3">
+            <label for="userPhoto" class="form-label">User Photo</label>
+            <input type="file" class="form-control" id="userPhoto" name="userPhoto" accept="image/*">
+        </div>
+        <!-- Enable -->
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="enable" name="enable" value="true">
+            <label class="form-check-label" for="enable">Enable</label>
+        </div>
+        <!-- Roles -->
+        <div class="mb-3">
+            <label for="roles" class="form-label">Roles</label>
+            <select class="form-select" id="roles" name="roles" multiple>
+                <option value="ROLE_USER">User</option>
+                <option value="ROLE_ADMIN">Admin</option>
+                <option value="ROLE_MODERATOR">Moderator</option>
+            </select>
+            <small class="text-muted">Hold CTRL or CMD to select multiple roles.</small>
+        </div>
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Create User</button>
     </form>
-
-    <div id="message"></div>
 </div>
 
-<!-- Scripts para o funcionamento do Bootstrap -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+<script>
+    document.getElementById('createUserForm').addEventListener('submit', async function (event) {
+        event.preventDefault(); // Prevent default form submission
 
+        const formData = new FormData(event.target);
+
+        // Convert form data to JSON
+        const user = {
+            email: formData.get('email'),
+            name: formData.get('name'),
+            surname: formData.get('surname'),
+            password: formData.get('password'),
+            userPhoto: formData.get('userPhoto') ? await readFileAsBase64(formData.get('userPhoto')) : null,
+            enable: formData.get('enable') === 'true',
+            roles: Array.from(formData.getAll('roles'))
+        };
+
+        // Send JSON data to the backend
+        const response = await fetch('/users/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        });
+
+        if (response.ok) {
+            alert('User created successfully!');
+        } else {
+            alert('Error creating user.');
+        }
+    });
+
+    // Function to convert file to Base64
+    function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = (error) => reject(error);
+            reader.readAsDataURL(file);
+        });
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
