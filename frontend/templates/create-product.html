@@ -8,29 +8,8 @@
 </head>
 <body>
 <div class="main-content">
-    <nav class="navbar">
-        <div class="logo">
-            <img src="images/banana.png" alt="BlueVelvet Music Store" />
-        </div>
-        <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="articles.html">Articles</a></li>
-            <li><a href="brands.html">Brands</a></li>
-            <li><a href="categories.html">Categories</a></li>
-            <li><a href="customers.html">Customers</a></li>
-            <li><a href="menus.html">Menus</a></li>
-            <li><a href="orders.html">Orders</a></li>
-            <li><a href="dashboard.html">Products</a></li>
-            <li><a href="sales-report.html">Sales Report</a></li>
-            <li><a href="settings.html">Settings</a></li>
-            <li><a href="shipping.html">Shipping</a></li>
-            <li><a href="users.html">Users</a></li>
-        </ul>
-    </nav>
+    <div id="navbar-container"></div>
+
     <div class="container">
         <h1>BlueVelvet Music Store</h1>
         <h2>Add Product</h2>
@@ -99,96 +78,101 @@
         </div>
 
     </div>
-    <script>
-        // Add new detail fields
-        document.getElementById('addDetailBtn').addEventListener('click', () => {
-            const container = document.getElementById('detailsContainer');
-            const div = document.createElement('div');
-            div.innerHTML = `
-                <input type="text" class="detailName" placeholder="Detail Name">
-                <input type="text" class="detailValue" placeholder="Detail Value">
-            `;
-            container.appendChild(div);
-        });
-
-        // Convert image to base64
-        async function toBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-                reader.readAsDataURL(file);
-            });
-        }
-
-        // Form submission
-        document.getElementById('createProductForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            const product = {
-                productName: document.getElementById('productName').value,
-                shortDescription: document.getElementById('shortDescription').value,
-                fullDescription: document.getElementById('fullDescription').value,
-                brand: document.getElementById('brand').value,
-                category: document.getElementById('category').value,
-                mainImage: await toBase64(document.getElementById('mainImage').files[0]),
-                featuredImages: [],
-                price: parseFloat(document.getElementById('price').value),
-                discount: parseFloat(document.getElementById('discount').value),
-                enabled: document.getElementById('enabled').checked,
-                inStock: document.getElementById('inStock').checked,
-                dimensions: {
-                    length: parseFloat(document.getElementById('length').value),
-                    width: parseFloat(document.getElementById('width').value),
-                    height: parseFloat(document.getElementById('height').value),
-                    weight: parseFloat(document.getElementById('weight').value),
-                    unit: document.getElementById('unit').value,
-                    unitWeight: document.getElementById('unitWeight').value
-                },
-                details: []
-            };
-
-            // Process featured images
-            const featuredImages = document.getElementById('featuredImages').files;
-            for (let i = 0; i < featuredImages.length; i++) {
-                const base64Image = await toBase64(featuredImages[i]);
-                product.featuredImages.push({ image: base64Image });
-            }
-
-            // Collect product details
-            const detailNames = document.querySelectorAll('.detailName');
-            const detailValues = document.querySelectorAll('.detailValue');
-            for (let i = 0; i < detailNames.length; i++) {
-                if (detailNames[i].value && detailValues[i].value) {
-                    product.details.push({
-                        name: detailNames[i].value,
-                        value: detailValues[i].value
-                    });
-                }
-            }
-
-            // Send the data
-            try {
-                const response = await fetch('http://localhost:8080/produtos', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(product)
-                });
-
-                if (response.ok) {
-                    alert('Product added successfully!');
-                    window.location.href = 'dashboard.html';
-                } else {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to add product.');
-            }
-        });
-    </script>
 </div>
+
+<div id="footer-container"></div>
 </body>
 </html>
+
+<script>
+    // Add new detail fields
+    document.getElementById('addDetailBtn').addEventListener('click', () => {
+        const container = document.getElementById('detailsContainer');
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <input type="text" class="detailName" placeholder="Detail Name">
+            <input type="text" class="detailValue" placeholder="Detail Value">
+        `;
+        container.appendChild(div);
+    });
+
+    // Convert image to base64
+    async function toBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Form submission
+    document.getElementById('createProductForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const product = {
+            productName: document.getElementById('productName').value,
+            shortDescription: document.getElementById('shortDescription').value,
+            fullDescription: document.getElementById('fullDescription').value,
+            brand: document.getElementById('brand').value,
+            category: document.getElementById('category').value,
+            mainImage: await toBase64(document.getElementById('mainImage').files[0]),
+            featuredImages: [],
+            price: parseFloat(document.getElementById('price').value),
+            discount: parseFloat(document.getElementById('discount').value),
+            enabled: document.getElementById('enabled').checked,
+            inStock: document.getElementById('inStock').checked,
+            dimensions: {
+                length: parseFloat(document.getElementById('length').value),
+                width: parseFloat(document.getElementById('width').value),
+                height: parseFloat(document.getElementById('height').value),
+                weight: parseFloat(document.getElementById('weight').value),
+                unit: document.getElementById('unit').value,
+                unitWeight: document.getElementById('unitWeight').value
+            },
+            details: []
+        };
+
+        // Process featured images
+        const featuredImages = document.getElementById('featuredImages').files;
+        for (let i = 0; i < featuredImages.length; i++) {
+            const base64Image = await toBase64(featuredImages[i]);
+            product.featuredImages.push({ image: base64Image });
+        }
+
+        // Collect product details
+        const detailNames = document.querySelectorAll('.detailName');
+        const detailValues = document.querySelectorAll('.detailValue');
+        for (let i = 0; i < detailNames.length; i++) {
+            if (detailNames[i].value && detailValues[i].value) {
+                product.details.push({
+                    name: detailNames[i].value,
+                    value: detailValues[i].value
+                });
+            }
+        }
+
+        // Send the data
+        try {
+            const response = await fetch('http://localhost:8080/produtos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(product)
+            });
+
+            if (response.ok) {
+                alert('Product added successfully!');
+                window.location.href = 'dashboard.html';
+            } else {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to add product.');
+        }
+    });
+</script>
+<script src="Page.js"></script>
+
