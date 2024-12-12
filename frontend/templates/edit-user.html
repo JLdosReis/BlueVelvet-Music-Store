@@ -43,12 +43,32 @@
                 <span id="user-id">Loading...</span>
             </div>
 
-            <input type="text" id="userName" placeholder="User Name" required>
-            <input type="email" id="userEmail" placeholder="Email" required>
-            <input type="password" id="userPassword" placeholder="Password" required>
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="text" id="surname" placeholder="Surname" required>
 
-            <label><input type="checkbox" id="isAdmin"> Is Admin</label>
-            <label><input type="checkbox" id="isActive"> Is Active</label>
+            <input type="email" id="email" placeholder="Email" required>
+
+            <input type="email" id="password" placeholder="Password" required>
+
+            <label><input type="checkbox" id="enable"> Enabled</label>
+
+            <!-- User Photo -->
+            <div>
+                <label for="userPhoto">User Photo:
+                    <input type="file" id="userPhoto" accept="image/*">
+                </label>
+                <div id="currentUserPhoto">
+                    <p>Current User Photo:</p>
+                    <img id="currentUserPhotoPreview" src="" alt="Current User Photo" style="width: 100px; height: 100px; display: none;">
+                    <label>File type:</label>
+                    <span id="contentType">Loading...</span>
+                </div>
+            </div>
+
+            <div>
+                <p>Roles:</p>
+                <div id="roles"></div>
+            </div>
 
             <div>
                 <button type="submit" id="saveUserBtn">Edit User</button>
@@ -86,11 +106,22 @@
                 const user = await response.json();
 
                 // Populate user details
-                document.getElementById('user-id').textContent = user.idUser || '';
-                document.getElementById('userName').value = user.userName || '';
-                document.getElementById('userEmail').value = user.email || '';
-                document.getElementById('isAdmin').checked = user.isAdmin || false;
-                document.getElementById('isActive').checked = user.isActive || false;
+                document.getElementById('user-id').textContent = user.userId || '';
+                document.getElementById('name').value = user.name || '';
+                document.getElementById('surname').value = user.surname || '';
+                document.getElementById('email').value = user.email || '';
+                document.getElementById('password').value = user.password || '';
+                document.getElementById('enable').checked = user.enable || false;
+
+                document.getElementById('contentType').value = user.contentType || '';
+
+                // Populate Main Image
+                if (user.userPhoto) {
+                    const userPhotoPreview = document.getElementById('currentUserPhotoPreview');
+                    userPhotoPreview.src = user.userPhoto;
+                    userPhotoPreview.style.display = 'block';
+                }
+
             } catch (error) {
                 console.error('Error loading user details:', error);
                 alert('Error loading user details. Please try again later.');
@@ -104,12 +135,25 @@
             const userId = document.getElementById('user-id').textContent;
             const updatedUser = {
                 idUser: userId,
-                userName: document.getElementById('userName').value,
+                name: document.getElementById('userName').value,
+                surname: document.getElementById('userName').value,
                 email: document.getElementById('userEmail').value,
-                password: document.getElementById('userPassword').value,
-                isAdmin: document.getElementById('isAdmin').checked,
-                isActive: document.getElementById('isActive').checked
+                password: document.getElementById('password').value,
+                enable: document.getElementById('enable').checked,
+                contentType: document.getElementById('contentType').value,
             };
+
+            // Process main image
+            const userPhotoInput = document.getElementById('userPhoto');
+            if (userPhotoInput.files.length > 0) {
+                updatedUser.userPhoto = await toBase64(userPhotoInput.files[0]);
+                updatedUser.contentType = userPhotoInput.files[0].type;
+            } else {
+                const currentUserPhotoPreview = document.getElementById('currentUserPhotoPreview');
+                if (currentUserPhotoPreview.src) {
+                    updatedUser.userPhoto = currentUserPhotoPreview.src;
+                }
+            }
 
             try {
                 const response = await fetch(`http://localhost:8080/usuarios/${userId}`, {

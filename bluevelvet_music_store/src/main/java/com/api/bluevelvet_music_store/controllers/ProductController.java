@@ -47,7 +47,8 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body("Produtos resetados com sucesso.");
     }
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GERENTE_VENDAS', 'EDITOR', 'ASSISTENTE', 'GERENTE_ENTREGAS','USUARIO')")
+//    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GERENTE_VENDAS', 'EDITOR', 'ASSISTENTE', 'GERENTE_ENTREGAS','USUARIO')")
+    @PreAuthorize("permitAll()")
     @GetMapping
     public ResponseEntity<Page<ProductModel>> getAllProducts(@PageableDefault(sort = "idProduct", direction = Sort.Direction.ASC)
                                                              Pageable pageable){
