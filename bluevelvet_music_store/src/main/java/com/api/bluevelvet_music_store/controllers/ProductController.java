@@ -47,7 +47,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body("Produtos resetados com sucesso.");
     }
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GERENTE_VENDAS', 'EDITOR', 'ASSISTENTE', 'GERENTE_ENTREGAS','USUARIO')")
+    @PreAuthorize("permitAll()")
     @GetMapping
     public ResponseEntity<Page<ProductModel>> getAllProducts(@PageableDefault(sort = "idProduct", direction = Sort.Direction.ASC)
                                                              Pageable pageable){
@@ -64,7 +64,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(produtoModelOpt.get());
     }
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GERENTE_VENDAS', 'EDITOR', 'ASSISTENTE', 'GERENTE_ENTREGAS','USUARIO')")
+    @PreAuthorize("permitAll()")
     @GetMapping("/search")
     public ResponseEntity<Page<ProductModel>> getProductsByParam(@RequestParam String name,
                                                                  @PageableDefault(sort = "idProduct", direction = Sort.Direction.ASC)
