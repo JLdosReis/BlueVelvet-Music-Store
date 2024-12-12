@@ -11,7 +11,7 @@
 	<groupId>com.api</groupId>
 	<artifactId>bluevelvet_music_store</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<product_name>bluevelvet_music_store</product_name>
+	<name>bluevelvet_music_store</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -28,11 +28,13 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
-<!--		<spring-security.version>6.4.1</spring-security.version>-->
-<!--		<spring.version>6.2.0</spring.version>-->
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -56,17 +58,19 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
 
-		<!-- ... other dependency elements ... -->
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-security</artifactId>-->
-<!--		</dependency>-->
-
-
-
-
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

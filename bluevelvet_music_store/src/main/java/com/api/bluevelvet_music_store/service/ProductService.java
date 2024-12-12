@@ -1,13 +1,13 @@
 package com.api.bluevelvet_music_store.service;
 
 import com.api.bluevelvet_music_store.dtos.ProductDto;
+import com.api.bluevelvet_music_store.mappers.ProductMapper;
 import com.api.bluevelvet_music_store.models.DetailsModel;
 import com.api.bluevelvet_music_store.models.DimensionsModel;
 import com.api.bluevelvet_music_store.models.ImageModel;
 import com.api.bluevelvet_music_store.models.ProductModel;
 import com.api.bluevelvet_music_store.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,9 +23,11 @@ import java.util.Optional;
 public class ProductService {
 
     final ProductRepository productRepository;
+    final ProductMapper productMapper;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
+        this.productMapper = productMapper;
     }
 
     @Transactional
@@ -49,82 +51,46 @@ public class ProductService {
         return productRepository.searchProdutos(name,pageable);
     }
 
+    public ProductModel toModel(ProductDto productDto){
+        return productMapper.toModel(productDto);
+    }
+
     @Transactional
     public void delete(ProductModel productModel) {
         productRepository.delete(productModel);
     }
 
-    public ProductModel copyProperties(ProductDto productDto, ProductModel productModel){
-
-        BeanUtils.copyProperties(productDto, productModel,"dimensions",
-                "mainImage","featuredImages","details");
-        productModel.setMainImage(productDto.mainImage());
-
-        DimensionsModel dimensions;
-        if (productModel.getDimensions() != null){
-            dimensions = productModel.getDimensions();
-            BeanUtils.copyProperties(productDto.dimensions(), dimensions);
-        }else {
-            dimensions = new DimensionsModel();
-            BeanUtils.copyProperties(productDto.dimensions(), dimensions);
-        }
-
-        List<ImageModel> images = new ArrayList<>();
-        productDto.featuredImages().forEach(img -> {
-            var image = new ImageModel();
-            image.setImages(img.image());
-            images.add(image);
-        });
-
-        List<DetailsModel> details = new ArrayList<>();
-        productDto.details().forEach(detailsDto -> {
-            var detail = new DetailsModel();
-            BeanUtils.copyProperties(detailsDto, detail);
-            details.add(detail);
-        });
-
-        productModel.setDimensions(dimensions);
-        productModel.setFeaturedImages(images);
-        productModel.setDetails(details);
-
-        if(!productRepository.existsByIdProduct(productModel.getIdProduct()))
-            productModel.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
-        productModel.setUpdateAt(LocalDateTime.now(ZoneId.of("UTC")));
-
-        return productModel;
-    }
-
     @Transactional
     public void productInitializer() {
-
-        if(productRepository.count() > 0)
+        if (productRepository.count() > 0) {
             productRepository.deleteAll();
+        }
 
-        for(int i = 0; i < 10; i++){
+        for (int i = 0; i < 10; i++) {
             ProductModel product = new ProductModel();
+            String imgData = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVBhXY+Tn5//PgASYoDQc0ECAgQEAitYBOhOAU/4AAAAASUVORK5CYII=";
 
             product.setProductName("Exemplo de Produto " + i);
             product.setShortDescription("Descrição curta do produto " + i + ".");
-            product.setFullDescription("Descrição completa do produto " + i +
-                    ", incluindo detalhes importantes.");
+            product.setFullDescription("Descrição completa do produto " + i + ", incluindo detalhes importantes.");
             product.setBrand("Marca Exemplo");
             product.setCategory("Categoria Exemplo");
+            product.setMainImage(imgData);
 
-            String mainImageData = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVBhXY+Tn5//PgASYoDQc0ECAgQEAitYBOhOAU/4AAAAASUVORK5CYII=";
-            product.setMainImage(mainImageData);
+            List<ImageModel> featuredImages = new ArrayList<>();
 
             ImageModel image1 = new ImageModel();
-            image1.setImages("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVBhXY+Tn5//PgASYoDQc0ECAgQEAitYBOhOAU/4AAAAASUVORK5CYII=");
+            image1.setImages(imgData);
+            featuredImages.add(image1);
 
             ImageModel image2 = new ImageModel();
-            image2.setImages("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVBhXY+Tn5//PgASYoDQc0ECAgQEAitYBOhOAU/4AAAAASUVORK5CYII=");
+            image2.setImages(imgData);
+            featuredImages.add(image2);
 
-            product.getFeaturedImages().add(image1);
-            product.getFeaturedImages().add(image2);
+            product.setFeaturedImages(featuredImages);
 
             product.setPrice(BigDecimal.valueOf(199.99));
             product.setDiscount(BigDecimal.valueOf(19.99));
-
             product.setEnabled(true);
             product.setInStock(true);
 
@@ -137,6 +103,8 @@ public class ProductService {
             dimensions.setUnitWeight("kg");
             product.setDimensions(dimensions);
 
+            List<DetailsModel> details = new ArrayList<>();
+
             DetailsModel detail1 = new DetailsModel();
             detail1.setName("Cor");
             detail1.setValue("Vermelho");
@@ -145,14 +113,22 @@ public class ProductService {
             detail2.setName("Tamanho");
             detail2.setValue("M");
 
-            product.getDetails().add(detail1);
-            product.getDetails().add(detail2);
+            details.add(detail1);
+            details.add(detail2);
+
+            product.setDetails(details);
 
             LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
             product.setCreatedAt(now);
             product.setUpdateAt(now);
 
-            productRepository.save(product);
+            try {
+                productRepository.save(product);
+            } catch (Exception e) {
+                System.err.println("Erro ao salvar o produto " + product.getProductName() +
+                        ": " + e.getMessage());
+            }
         }
     }
+
 }
