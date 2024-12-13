@@ -39,7 +39,7 @@ public class UserController {
         this.authenticationManager = authenticationManager;
     }
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GERENTE_VENDAS')")
+    @PreAuthorize("permitAll()")
     @PostMapping("/registro")
     public ResponseEntity<Object> saveUser(@RequestBody @Valid UserDto userDto) {
         if(userDetailsService.existsByEmail(userDto.email())){
